@@ -7,8 +7,12 @@
 		//totalPrice = quantidade * preço/unid
 		public double totalPrice { get; set; }
 		//fk
-		public int order { get; set; }
+		public Order order { get; set; }
+		[ForeignKey(nameof(order))]
+		public int orderFK { get; set; }
 		//fk
-		public int produto { get; set; }
+		public Product product { get; set; }
+		[ForeignKey(nameof(product))]
+		public int productFK { get; set; }
 	}
 }

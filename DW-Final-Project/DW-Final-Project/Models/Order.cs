@@ -6,6 +6,9 @@
 		//preço da conta toda
 		public double price { get; set; }
 		//fk
-		public int user { get; set; }
+		public User user { get; set; }
+		
+		[ForeignKey(nameof(user))]
+		public int userFK { get; set; }
 	}
 }
