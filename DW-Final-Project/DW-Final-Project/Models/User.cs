@@ -7,6 +7,8 @@
 		public string password { get; set; }
 		public string? token { get; set; }
 		//fk
-		public int type { get; set; }
+		public Type type { get; set; }
+		[ForeignKey(nameof(type))]
+		public int typeFK { get; set; }
 	}
 }
