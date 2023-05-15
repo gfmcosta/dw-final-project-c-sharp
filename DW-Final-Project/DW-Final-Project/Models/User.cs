@@ -16,7 +16,6 @@ namespace DW_Final_Project.Models
 		public string email { get; set; }
 		[Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Password")]
-		[DataType(DataType.Password)]
 		public string password { get; set; }
 		public string? token { get; set; }
 		//fk
