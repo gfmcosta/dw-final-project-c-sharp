@@ -48,7 +48,7 @@ namespace DW_Final_Project.Controllers
         // GET: Person/Create
         public IActionResult Create()
         {
-            ViewData["userFK"] = new SelectList(_context.User, "id", "id");
+            ViewData["userFK"] = new SelectList(_context.User, "id", "email");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,DateTime,gender,imagePath,userFK")] Person person)
+        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace DW_Final_Project.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["userFK"] = new SelectList(_context.User, "id", "id", person.userFK);
+            ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
             return View(person);
         }
 
@@ -82,7 +82,7 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
-            ViewData["userFK"] = new SelectList(_context.User, "id", "id", person.userFK);
+            ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
             return View(person);
         }
 
@@ -91,7 +91,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,DateTime,gender,imagePath,userFK")] Person person)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person)
         {
             if (id != person.id)
             {
@@ -118,7 +118,7 @@ namespace DW_Final_Project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["userFK"] = new SelectList(_context.User, "id", "id", person.userFK);
+            ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
             return View(person);
         }
 

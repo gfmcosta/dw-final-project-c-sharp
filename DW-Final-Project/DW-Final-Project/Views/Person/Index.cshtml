@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.postalCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.dataNasc)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.gender)
@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.postalCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateTime)
+                @Html.DisplayFor(modelItem => item.dataNasc)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.gender)
@@ -64,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.imagePath)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.user.id)
+                @Html.DisplayFor(modelItem => item.user.email)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

@@ -25,7 +25,5 @@ namespace DW_Final_Project.Models
 		public ICollection<OrderItem> orderItemList { get; set; }
 		public ICollection<Product_Image> productImageList { get; set; }
 		public ICollection<Category> categoryList { get; set; }
-
-
 	}
 }
