@@ -1,2 +1,2 @@
 # DW-Final-Project
-Trabalho final da Unidade Curricular de Desenvolvimento Web
+Trabalho final de C# da Unidade Curricular de Desenvolvimento Web
