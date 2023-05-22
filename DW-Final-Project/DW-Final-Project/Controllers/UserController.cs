@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace DW_Final_Project.Controllers
 {
@@ -19,6 +20,26 @@ namespace DW_Final_Project.Controllers
             _context = context;
         }
 
+
+		//GET: User/Login
+		[HttpGet("/User/Login/{email}/{pwd}")]
+		public async Task<IActionResult> Login(string email,string pwd) {
+			if (email == null || pwd == null || _context.User == null) {
+				return BadRequest();
+			}
+
+            var user = await _context.User
+                .Include(u => u.type)
+                .Where(m => m.email.Equals(email) && m.password.Equals(pwd)).ToListAsync();
+
+			//	.FirstOrDefaultAsync(m => m.email.Equals(email) && m.password.Equals(pwd));
+			if (user == null) {
+				return NotFound();
+			}
+
+			return Ok();
+		}
+
         // GET: User
         public async Task<IActionResult> Index()
         {
@@ -26,8 +47,8 @@ namespace DW_Final_Project.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: User/Details/5
-        public async Task<IActionResult> Details(int? id)
+		// GET: User/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.User == null)
             {
