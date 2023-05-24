@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DW_Final_Project.Controllers
 {
@@ -24,20 +27,25 @@ namespace DW_Final_Project.Controllers
 		//GET: User/Login
 		[HttpGet("/User/Login/{email}/{pwd}")]
 		public async Task<IActionResult> Login(string email,string pwd) {
-			if (email == null || pwd == null || _context.User == null) {
+			if (email == null || pwd == null || email == "" || pwd == "" || _context.User == null) {
 				return BadRequest();
 			}
 
-            var user = await _context.User
-                .Include(u => u.type)
-                .Where(m => m.email.Equals(email) && m.password.Equals(pwd)).ToListAsync();
+			var user = await _context.User
+		.Include(u => u.type)
+		.FirstOrDefaultAsync(m => m.email.Equals(email) && m.password.Equals(pwd));
 
-			//	.FirstOrDefaultAsync(m => m.email.Equals(email) && m.password.Equals(pwd));
 			if (user == null) {
 				return NotFound();
 			}
 
-			return Ok();
+			var options = new JsonSerializerOptions {
+				ReferenceHandler = ReferenceHandler.Preserve
+			};
+
+			var serializedUser = JsonSerializer.Serialize(user, options);
+
+			return Ok(serializedUser);
 		}
 
         // GET: User

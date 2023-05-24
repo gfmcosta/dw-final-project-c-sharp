@@ -5,10 +5,7 @@ namespace DW_Final_Project.Models
 {
 	public class User
 	{
-		public User() {
-			personsList = new HashSet<Person>();
-		}
-
+	
 		public int id { get; set; }
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Email")]
@@ -22,6 +19,6 @@ namespace DW_Final_Project.Models
 		[ForeignKey(nameof(type))]
 		public int typeFK { get; set; }
 		public Models.Type type { get; set; }
-		public ICollection<Person> personsList { get; set; }
+
 	}
 }
