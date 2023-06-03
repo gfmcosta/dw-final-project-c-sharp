@@ -22,7 +22,7 @@ namespace DW_Final_Project.Controllers
         // GET: Order
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Order.Include(o => o.person);
+            var applicationDbContext = _context.Order.Include(o => o.Person);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace DW_Final_Project.Controllers
             }
 
             var order = await _context.Order
-                .Include(o => o.person)
+                .Include(o => o.Person)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (order == null)
             {
@@ -131,7 +131,7 @@ namespace DW_Final_Project.Controllers
             }
 
             var order = await _context.Order
-                .Include(o => o.person)
+                .Include(o => o.Person)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (order == null)
             {
