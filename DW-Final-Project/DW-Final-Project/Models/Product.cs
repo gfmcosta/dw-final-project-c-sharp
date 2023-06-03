@@ -2,6 +2,9 @@
 
 namespace DW_Final_Project.Models
 {
+	/// <summary>
+	/// Informações de um produto
+	/// </summary>
 	public class Product
 	{
 		public Product() {
@@ -9,21 +12,55 @@ namespace DW_Final_Project.Models
 			productImageList = new HashSet<Product_Image>();
 			categoryList = new HashSet<Category>();
 		}
+
+		/// <summary>
+		/// PK
+		/// </summary>
 		public int id { get; set; }
+
+		/// <summary>
+		/// Nome de um produto
+		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
-		[Display(Name = "Nome")]
+        [RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ ]+$", ErrorMessage = "Tem de escrever um {0} válido")]
+        [Display(Name = "Nome")]
 		public string name { get; set; }
-		[Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
+
+        /// <summary>
+        /// Descrição de um produto
+        /// </summary>
+        [RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ ]+$", ErrorMessage = "Tem de escrever uma {0} válida")]
+        [Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Descrição")]
 		public string description { get; set; }
+
+		/// <summary>
+		/// Quantidade de um produto
+		/// </summary>
 		[Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Quantidade")]
 		public int quantity { get; set; }
+
+
+		/// <summary>
+		/// Preço unitário de um produto
+		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Preço")]
-		public double price { get; set; }
+        [RegularExpression("^[0-9.]+$", ErrorMessage = "Tem de escrever um {0} válido")]
+        public double price { get; set; }
+
+		/// <summary>
+		/// Lista de produtos numa ordem/compra
+		/// </summary>
 		public ICollection<OrderItem> orderItemList { get; set; }
+		/// <summary>
+		/// Lista de Imagens de um produto
+		/// </summary>
 		public ICollection<Product_Image> productImageList { get; set; }
+		/// <summary>
+		/// Lista de categorias de um produto
+		/// </summary>
 		public ICollection<Category> categoryList { get; set; }
 	}
 }
