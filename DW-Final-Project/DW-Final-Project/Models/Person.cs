@@ -63,8 +63,6 @@ namespace DW_Final_Project.Models
 		[Display(Name = "Data de Nascimento")]
 		public DateTime dataNasc { get; set; }
 
-
-
 		/// <summary>
 		/// Sexo de um utilizador. M para Masculino e F para Feminino
 		/// </summary>
@@ -85,6 +83,11 @@ namespace DW_Final_Project.Models
 		[ForeignKey(nameof(user))]
 		public int userFK { get; set; }
 		public User user { get; set; }
+
+		/// <summary>
+		/// FK Person
+		/// </summary>
+		public Person person { get; set; }
 
 		/// <summary>
 		/// Lista de ordens/compras de um utilizador
