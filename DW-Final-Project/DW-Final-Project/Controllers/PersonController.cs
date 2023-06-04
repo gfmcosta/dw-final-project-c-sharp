@@ -57,17 +57,51 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person)
+        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile)
         {
+            ModelState.Remove("user");
+            ModelState.Remove("imageFile");
+            ModelState.Remove("imagePath");
             if (ModelState.IsValid)
             {
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    // Gerar um nome único para o arquivo
+                    string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+
+                    // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+                    // Salvar o arquivo no servidor
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
+                    person.imagePath = fileName;
+                }
+                else
+                {
+                    if (person.gender == "M")
+                    {
+                        person.imagePath = "default-m.png";
+                    }
+                    else
+                    {
+                        person.imagePath = "default-f.png";
+                    }
+                }
+
                 _context.Add(person);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
             return View(person);
         }
+
 
         // GET: Person/Edit/5
         public async Task<IActionResult> Edit(int? id)

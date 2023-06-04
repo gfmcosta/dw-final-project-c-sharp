@@ -22,7 +22,7 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Descrição")]
-		[RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ ]+$", ErrorMessage = "Tem de escrever uma {0} válida")]
+		[RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ -]+$", ErrorMessage = "Tem de escrever uma {0} válida")]
 		[StringLength(50,ErrorMessage ="A {0} só pode ter apenas {1} caracteres")]
 		public string description { get; set; }
 

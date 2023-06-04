@@ -66,10 +66,12 @@ namespace DW_Final_Project.Models
 
 
 		/// <summary>
-		/// Sexo de um utilizador
+		/// Sexo de um utilizador. M para Masculino e F para Feminino
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
-		[Display(Name = "Sexo")]
+        [RegularExpression("[MF]{1}",
+         ErrorMessage = "O {0} deve ter apenas um caracter. 'M' para Masculino e 'F' para Feminino")]
+        [Display(Name = "Sexo")]
 		public string gender { get; set; }
 
 		/// <summary>
@@ -88,5 +90,12 @@ namespace DW_Final_Project.Models
 		/// Lista de ordens/compras de um utilizador
 		/// </summary>
 		public ICollection<Order> orderList { get; set; }
-	}
+
+
+		/// <summary>
+		/// DataNasc formatada para aparecer somente dd/MM/yyyy
+		/// </summary>
+        [NotMapped]
+        public string DataNascFormatted => dataNasc.ToString("dd/MM/yyyy");
+    }
 }
