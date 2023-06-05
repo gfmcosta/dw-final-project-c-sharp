@@ -33,12 +33,11 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		/// falar com  o professor ainda sobre isto
 		public string? token { get; set; }
-		
 
-		/// <summary>
-		/// FK Type
-		/// </summary>
-		[ForeignKey(nameof(type))]
+        /// <summary>
+        /// FK Type
+        /// </summary>
+        [ForeignKey(nameof(type))]
 		public int typeFK { get; set; }
 		public Models.Type type { get; set; }
 

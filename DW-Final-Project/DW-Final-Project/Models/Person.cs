@@ -57,10 +57,11 @@ namespace DW_Final_Project.Models
         public string postalCode { get; set; }
 
 
-		/// <summary>
-		/// Data de Nascimento de um utilizador
-		/// </summary>
-		[Display(Name = "Data de Nascimento")]
+        /// <summary>
+        /// Data de Nascimento de um utilizador
+        /// </summary>
+        [Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
+        [Display(Name = "Data de Nascimento")]
 		public DateTime dataNasc { get; set; }
 
 		/// <summary>
@@ -75,7 +76,7 @@ namespace DW_Final_Project.Models
 		/// <summary>
 		/// Caminho de uma imagem de um utilizador
 		/// </summary>
-		public string imagePath { get; set; }
+		public string? imagePath { get; set; }
 		
 		/// <summary>
 		/// FK User
@@ -83,11 +84,6 @@ namespace DW_Final_Project.Models
 		[ForeignKey(nameof(user))]
 		public int userFK { get; set; }
 		public User user { get; set; }
-
-		/// <summary>
-		/// FK Person
-		/// </summary>
-		public Person person { get; set; }
 
 		/// <summary>
 		/// Lista de ordens/compras de um utilizador

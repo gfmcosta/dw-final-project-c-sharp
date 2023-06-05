@@ -48,7 +48,7 @@ namespace DW_Final_Project.Controllers
         // GET: Order/Create
         public IActionResult Create()
         {
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "id");
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "address");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,price,personFK")] Order order)
+        public async Task<IActionResult> Create([Bind("id,price,IVA,personFK")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace DW_Final_Project.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "id", order.personFK);
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "address", order.personFK);
             return View(order);
         }
 
@@ -82,7 +82,7 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "id", order.personFK);
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "address", order.personFK);
             return View(order);
         }
 
@@ -91,7 +91,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,price,personFK")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("id,price,IVA,personFK")] Order order)
         {
             if (id != order.id)
             {
@@ -118,7 +118,7 @@ namespace DW_Final_Project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "id", order.personFK);
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "address", order.personFK);
             return View(order);
         }
 

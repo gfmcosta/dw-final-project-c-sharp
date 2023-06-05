@@ -21,8 +21,16 @@ namespace DW_Final_Project.Data
         {
             base.OnModelCreating(builder);
 			builder.Entity<Models.Type>().HasData(
-				new Models.Type { id = 1, description = "admin" },
-				new Models.Type { id = 2, description = "client"});
+				new Models.Type { id = 1, description = "Admin" },
+				new Models.Type { id = 2, description = "Client"}
+			);
+			builder.Entity<Product_Season>().HasData(
+				new Product_Season { id = 1 , description="Spring"},
+                new Product_Season { id = 2, description = "Summer" },
+                new Product_Season { id = 3, description = "Fall" },
+                new Product_Season { id = 4, description = "Winter" }
+
+            );
         }
 
         // ********************************************
@@ -36,5 +44,6 @@ namespace DW_Final_Project.Data
 		public DbSet<Product_Image> Product_Image { get; set; }
 		public DbSet<Models.Type> Type { get; set; }
 		public DbSet<User> User { get; set; }
+		public DbSet<Product_Season> Product_Season { get; set; }
 	}
 }

@@ -10,90 +10,87 @@ using DW_Final_Project.Models;
 
 namespace DW_Final_Project.Controllers
 {
-    public class Product_ImageController : Controller
+    public class Product_SeasonController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public Product_ImageController(ApplicationDbContext context)
+        public Product_SeasonController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Product_Image
+        // GET: Product_Season
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Product_Image.Include(p => p.product);
-            return View(await applicationDbContext.ToListAsync());
+              return _context.Product_Season != null ? 
+                          View(await _context.Product_Season.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.Product_Season'  is null.");
         }
 
-        // GET: Product_Image/Details/5
+        // GET: Product_Season/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Product_Image == null)
+            if (id == null || _context.Product_Season == null)
             {
                 return NotFound();
             }
 
-            var product_Image = await _context.Product_Image
-                .Include(p => p.product)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product_Image == null)
+            var product_Season = await _context.Product_Season
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (product_Season == null)
             {
                 return NotFound();
             }
 
-            return View(product_Image);
+            return View(product_Season);
         }
 
-        // GET: Product_Image/Create
+        // GET: Product_Season/Create
         public IActionResult Create()
         {
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description");
             return View();
         }
 
-        // POST: Product_Image/Create
+        // POST: Product_Season/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,imagePath,productFK")] Product_Image product_Image)
+        public async Task<IActionResult> Create([Bind("id,description")] Product_Season product_Season)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product_Image);
+                _context.Add(product_Season);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description", product_Image.productFK);
-            return View(product_Image);
+            return View(product_Season);
         }
 
-        // GET: Product_Image/Edit/5
+        // GET: Product_Season/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Product_Image == null)
+            if (id == null || _context.Product_Season == null)
             {
                 return NotFound();
             }
 
-            var product_Image = await _context.Product_Image.FindAsync(id);
-            if (product_Image == null)
+            var product_Season = await _context.Product_Season.FindAsync(id);
+            if (product_Season == null)
             {
                 return NotFound();
             }
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description", product_Image.productFK);
-            return View(product_Image);
+            return View(product_Season);
         }
 
-        // POST: Product_Image/Edit/5
+        // POST: Product_Season/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,imagePath,productFK")] Product_Image product_Image)
+        public async Task<IActionResult> Edit(int id, [Bind("id,description")] Product_Season product_Season)
         {
-            if (id != product_Image.Id)
+            if (id != product_Season.id)
             {
                 return NotFound();
             }
@@ -102,12 +99,12 @@ namespace DW_Final_Project.Controllers
             {
                 try
                 {
-                    _context.Update(product_Image);
+                    _context.Update(product_Season);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!Product_ImageExists(product_Image.Id))
+                    if (!Product_SeasonExists(product_Season.id))
                     {
                         return NotFound();
                     }
@@ -118,51 +115,49 @@ namespace DW_Final_Project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description", product_Image.productFK);
-            return View(product_Image);
+            return View(product_Season);
         }
 
-        // GET: Product_Image/Delete/5
+        // GET: Product_Season/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Product_Image == null)
+            if (id == null || _context.Product_Season == null)
             {
                 return NotFound();
             }
 
-            var product_Image = await _context.Product_Image
-                .Include(p => p.product)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (product_Image == null)
+            var product_Season = await _context.Product_Season
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (product_Season == null)
             {
                 return NotFound();
             }
 
-            return View(product_Image);
+            return View(product_Season);
         }
 
-        // POST: Product_Image/Delete/5
+        // POST: Product_Season/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Product_Image == null)
+            if (_context.Product_Season == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Product_Image'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Product_Season'  is null.");
             }
-            var product_Image = await _context.Product_Image.FindAsync(id);
-            if (product_Image != null)
+            var product_Season = await _context.Product_Season.FindAsync(id);
+            if (product_Season != null)
             {
-                _context.Product_Image.Remove(product_Image);
+                _context.Product_Season.Remove(product_Season);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool Product_ImageExists(int id)
+        private bool Product_SeasonExists(int id)
         {
-          return (_context.Product_Image?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Product_Season?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }

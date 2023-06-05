@@ -17,10 +17,16 @@
             @Html.DisplayFor(model => model.price)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IVA)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IVA)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Person)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Person.id)
+            @Html.DisplayFor(model => model.Person.address)
         </dd>
     </dl>
 </div>

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DW_Final_Project.Data.Migrations
+namespace DW_Final_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230523132311_One-to-One User_Person")]
-    partial class OnetoOneUser_Person
+    [Migration("20230605190037_Removed person from user table")]
+    partial class Removedpersonfromusertable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,8 @@ namespace DW_Final_Project.Data.Migrations
 
                     b.Property<string>("description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
 
@@ -64,6 +65,9 @@ namespace DW_Final_Project.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("IVA")
+                        .HasColumnType("int");
 
                     b.Property<int>("personFK")
                         .HasColumnType("int");
@@ -132,11 +136,13 @@ namespace DW_Final_Project.Data.Migrations
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("phoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)");
 
                     b.Property<string>("postalCode")
                         .IsRequired()
@@ -174,7 +180,12 @@ namespace DW_Final_Project.Data.Migrations
                     b.Property<int>("quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("seasonFK")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
+
+                    b.HasIndex("seasonFK");
 
                     b.ToTable("Product");
                 });
@@ -201,7 +212,7 @@ namespace DW_Final_Project.Data.Migrations
                     b.ToTable("Product_Image");
                 });
 
-            modelBuilder.Entity("DW_Final_Project.Models.Type", b =>
+            modelBuilder.Entity("DW_Final_Project.Models.Product_Season", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -215,7 +226,59 @@ namespace DW_Final_Project.Data.Migrations
 
                     b.HasKey("id");
 
+                    b.ToTable("Product_Season");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            description = "Spring"
+                        },
+                        new
+                        {
+                            id = 2,
+                            description = "Summer"
+                        },
+                        new
+                        {
+                            id = 3,
+                            description = "Fall"
+                        },
+                        new
+                        {
+                            id = 4,
+                            description = "Winter"
+                        });
+                });
+
+            modelBuilder.Entity("DW_Final_Project.Models.Type", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("id");
+
                     b.ToTable("Type");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            description = "Admin"
+                        },
+                        new
+                        {
+                            id = 2,
+                            description = "Client"
+                        });
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.User", b =>
@@ -466,13 +529,13 @@ namespace DW_Final_Project.Data.Migrations
 
             modelBuilder.Entity("DW_Final_Project.Models.Order", b =>
                 {
-                    b.HasOne("DW_Final_Project.Models.Person", "person")
+                    b.HasOne("DW_Final_Project.Models.Person", "Person")
                         .WithMany("orderList")
                         .HasForeignKey("personFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("person");
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.OrderItem", b =>
@@ -503,6 +566,17 @@ namespace DW_Final_Project.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("DW_Final_Project.Models.Product", b =>
+                {
+                    b.HasOne("DW_Final_Project.Models.Product_Season", "Season")
+                        .WithMany("productList")
+                        .HasForeignKey("seasonFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Season");
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Product_Image", b =>
@@ -593,6 +667,11 @@ namespace DW_Final_Project.Data.Migrations
                     b.Navigation("orderItemList");
 
                     b.Navigation("productImageList");
+                });
+
+            modelBuilder.Entity("DW_Final_Project.Models.Product_Season", b =>
+                {
+                    b.Navigation("productList");
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Type", b =>

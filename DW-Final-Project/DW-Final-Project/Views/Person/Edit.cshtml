@@ -35,24 +35,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="dataNasc" class="control-label"></label>
-                <input asp-for="dataNasc" class="form-control" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <input asp-for="dataNasc" class="form-control" />
                 <span asp-validation-for="dataNasc" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="gender" class="control-label"></label>
-                <div>
-                    <label>
-                        <input asp-for="gender" type="radio" value="M" /> Masculino
-                    </label>
-                    <label>
-                        <input asp-for="gender" type="radio" value="F" /> Feminino
-                    </label>
-                </div>
+                <input asp-for="gender" class="form-control" />
                 <span asp-validation-for="gender" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="imagePath" class="control-label"></label>
-                <input name="imageFile" class="form-control" type="file" accept="image/*" />
+                <input asp-for="imagePath" class="form-control" />
                 <span asp-validation-for="imagePath" class="text-danger"></span>
             </div>
             <div class="form-group">

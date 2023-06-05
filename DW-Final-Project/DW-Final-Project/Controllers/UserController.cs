@@ -7,10 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace DW_Final_Project.Controllers
 {
@@ -30,8 +26,8 @@ namespace DW_Final_Project.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-		// GET: User/Details/5
-		public async Task<IActionResult> Details(int? id)
+        // GET: User/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.User == null)
             {
@@ -52,7 +48,7 @@ namespace DW_Final_Project.Controllers
         // GET: User/Create
         public IActionResult Create()
         {
-            ViewData["typeFK"] = new SelectList(_context.Type, "id", "id");
+            ViewData["typeFK"] = new SelectList(_context.Type, "id", "description");
             return View();
         }
 
@@ -63,13 +59,16 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,email,password,token,typeFK")] User user)
         {
+            Models.Type tipo = await _context.Type.FindAsync(user.typeFK);
+            user.type = tipo;
+            ModelState.Remove("type");
             if (ModelState.IsValid)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["typeFK"] = new SelectList(_context.Type, "id", "id", user.typeFK);
+            ViewData["typeFK"] = new SelectList(_context.Type, "id", "description", user.typeFK);
             return View(user);
         }
 
@@ -86,7 +85,7 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
-            ViewData["typeFK"] = new SelectList(_context.Type, "id", "id", user.typeFK);
+            ViewData["typeFK"] = new SelectList(_context.Type, "id", "description", user.typeFK);
             return View(user);
         }
 
@@ -122,7 +121,7 @@ namespace DW_Final_Project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["typeFK"] = new SelectList(_context.Type, "id", "id", user.typeFK);
+            ViewData["typeFK"] = new SelectList(_context.Type, "id", "description", user.typeFK);
             return View(user);
         }
 

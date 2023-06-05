@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DW_Final_Project.Models.Order>
+﻿@model IEnumerable<DW_Final_Project.Models.Product_Season>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IVA)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Person)
+                @Html.DisplayNameFor(model => model.description)
             </th>
             <th></th>
         </tr>
@@ -28,13 +22,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IVA)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Person.address)
+                @Html.DisplayFor(modelItem => item.description)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

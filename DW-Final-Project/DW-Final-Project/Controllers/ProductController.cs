@@ -22,9 +22,8 @@ namespace DW_Final_Project.Controllers
         // GET: Product
         public async Task<IActionResult> Index()
         {
-              return _context.Product != null ? 
-                          View(await _context.Product.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Product'  is null.");
+            var applicationDbContext = _context.Product.Include(p => p.Season);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Product/Details/5
@@ -36,6 +35,7 @@ namespace DW_Final_Project.Controllers
             }
 
             var product = await _context.Product
+                .Include(p => p.Season)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (product == null)
             {
@@ -48,6 +48,7 @@ namespace DW_Final_Project.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price")] Product product)
+        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price,seasonFK")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace DW_Final_Project.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id", product.seasonFK);
             return View(product);
         }
 
@@ -80,6 +82,7 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id", product.seasonFK);
             return View(product);
         }
 
@@ -88,7 +91,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,price")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,price,seasonFK")] Product product)
         {
             if (id != product.id)
             {
@@ -115,6 +118,7 @@ namespace DW_Final_Project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id", product.seasonFK);
             return View(product);
         }
 
@@ -127,6 +131,7 @@ namespace DW_Final_Project.Controllers
             }
 
             var product = await _context.Product
+                .Include(p => p.Season)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (product == null)
             {

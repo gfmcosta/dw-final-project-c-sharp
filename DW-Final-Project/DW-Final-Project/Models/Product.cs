@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DW_Final_Project.Models
 {
@@ -41,7 +42,6 @@ namespace DW_Final_Project.Models
 		[Display(Name = "Quantidade")]
 		public int quantity { get; set; }
 
-
 		/// <summary>
 		/// Preço unitário de um produto
 		/// </summary>
@@ -50,10 +50,17 @@ namespace DW_Final_Project.Models
         [RegularExpression("^[0-9.]+$", ErrorMessage = "Tem de escrever um {0} válido")]
         public double price { get; set; }
 
-		/// <summary>
-		/// Lista de produtos numa ordem/compra
-		/// </summary>
-		public ICollection<OrderItem> orderItemList { get; set; }
+        /// <summary>
+        /// FK Season
+        /// </summary>
+        [ForeignKey(nameof(Season))]
+        public int seasonFK { get; set; }
+        public Product_Season Season { get; set; }
+
+        /// <summary>
+        /// Lista de produtos numa ordem/compra
+        /// </summary>
+        public ICollection<OrderItem> orderItemList { get; set; }
 		/// <summary>
 		/// Lista de Imagens de um produto
 		/// </summary>

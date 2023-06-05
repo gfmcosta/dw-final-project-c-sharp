@@ -25,6 +25,13 @@ namespace DW_Final_Project.Models
          ErrorMessage = "Tem de escrever um {0} válido")]
         public double price { get; set; }
 
+		/// <summary>
+		/// Percentagem  do IVA
+		/// </summary>
+		[Display(Name = "IVA")]
+		[RegularExpression("^[1-9][0-9]+$",
+		 ErrorMessage = "Tem de escrever um valor para o {0} válido")]
+		public int IVA { get; set; } = 23;
 
 		/// <summary>
 		/// FK person

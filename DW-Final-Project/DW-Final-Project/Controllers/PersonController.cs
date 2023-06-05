@@ -8,37 +8,30 @@ using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 
-namespace DW_Final_Project.Controllers
-{
-    public class PersonController : Controller
-    {
+namespace DW_Final_Project.Controllers {
+    public class PersonController : Controller {
         private readonly ApplicationDbContext _context;
 
-        public PersonController(ApplicationDbContext context)
-        {
+        public PersonController(ApplicationDbContext context) {
             _context = context;
         }
 
         // GET: Person
-        public async Task<IActionResult> Index()
-        {
+        public async Task<IActionResult> Index() {
             var applicationDbContext = _context.Person.Include(p => p.user);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Person/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Person == null)
-            {
+        public async Task<IActionResult> Details(int? id) {
+            if (id == null || _context.Person == null) {
                 return NotFound();
             }
 
             var person = await _context.Person
                 .Include(p => p.user)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (person == null)
-            {
+            if (person == null) {
                 return NotFound();
             }
 
@@ -46,8 +39,7 @@ namespace DW_Final_Project.Controllers
         }
 
         // GET: Person/Create
-        public IActionResult Create()
-        {
+        public IActionResult Create() {
             ViewData["userFK"] = new SelectList(_context.User, "id", "email");
             return View();
         }
@@ -57,15 +49,14 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile)
-        {
+        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile) {
             ModelState.Remove("user");
             ModelState.Remove("imageFile");
             ModelState.Remove("imagePath");
-            if (ModelState.IsValid)
-            {
-                if (imageFile != null && imageFile.Length > 0)
-                {
+            User user = await _context.User.FindAsync(person.userFK);
+            person.user = user;
+            if (ModelState.IsValid) {
+                if (imageFile != null && imageFile.Length > 0) {
                     // Gerar um nome único para o arquivo
                     string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
 
@@ -73,22 +64,16 @@ namespace DW_Final_Project.Controllers
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
 
                     // Salvar o arquivo no servidor
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
+                    using (var fileStream = new FileStream(filePath, FileMode.Create)) {
                         await imageFile.CopyToAsync(fileStream);
                     }
 
                     // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
                     person.imagePath = fileName;
-                }
-                else
-                {
-                    if (person.gender == "M")
-                    {
+                } else {
+                    if (person.gender == "M") {
                         person.imagePath = "default-m.png";
-                    }
-                    else
-                    {
+                    } else {
                         person.imagePath = "default-f.png";
                     }
                 }
@@ -104,16 +89,13 @@ namespace DW_Final_Project.Controllers
 
 
         // GET: Person/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Person == null)
-            {
+        public async Task<IActionResult> Edit(int? id) {
+            if (id == null || _context.Person == null) {
                 return NotFound();
             }
 
             var person = await _context.Person.FindAsync(id);
-            if (person == null)
-            {
+            if (person == null) {
                 return NotFound();
             }
             ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
@@ -125,28 +107,19 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person)
-        {
-            if (id != person.id)
-            {
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person) {
+            if (id != person.id) {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
+            if (ModelState.IsValid) {
+                try {
                     _context.Update(person);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PersonExists(person.id))
-                    {
+                } catch (DbUpdateConcurrencyException) {
+                    if (!PersonExists(person.id)) {
                         return NotFound();
-                    }
-                    else
-                    {
+                    } else {
                         throw;
                     }
                 }
@@ -157,18 +130,15 @@ namespace DW_Final_Project.Controllers
         }
 
         // GET: Person/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Person == null)
-            {
+        public async Task<IActionResult> Delete(int? id) {
+            if (id == null || _context.Person == null) {
                 return NotFound();
             }
 
             var person = await _context.Person
                 .Include(p => p.user)
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (person == null)
-            {
+            if (person == null) {
                 return NotFound();
             }
 
@@ -178,25 +148,21 @@ namespace DW_Final_Project.Controllers
         // POST: Person/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Person == null)
-            {
+        public async Task<IActionResult> DeleteConfirmed(int id) {
+            if (_context.Person == null) {
                 return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
             }
             var person = await _context.Person.FindAsync(id);
-            if (person != null)
-            {
+            if (person != null) {
                 _context.Person.Remove(person);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PersonExists(int id)
-        {
-          return (_context.Person?.Any(e => e.id == id)).GetValueOrDefault();
+        private bool PersonExists(int id) {
+            return (_context.Person?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }
