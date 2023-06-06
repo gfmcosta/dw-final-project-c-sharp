@@ -21,9 +21,9 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Preço")]
-        [RegularExpression("^[0-9.]+$",
-         ErrorMessage = "Tem de escrever um {0} válido")]
-        public double price { get; set; }
+        [RegularExpression("^[0-9,.]+$", ErrorMessage = "Insira um {0} válido")]
+        [DataType(DataType.Currency, ErrorMessage = "Insira um {0} válido")]
+        public decimal price { get; set; }
 
 		/// <summary>
 		/// Percentagem  do IVA

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using System.Globalization;
 
 namespace DW_Final_Project.Controllers
 {
@@ -57,16 +58,39 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price,imagePath,seasonFK")] Product product)
+        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price,imagePath,seasonFK")] Product product, string precoD, IFormFile imageFile)
         {
+            CultureInfo culture = new CultureInfo("en-US"); // Defina a cultura desejada
+            product.price = decimal.Parse(precoD,culture);
             ModelState.Remove("Season");
             if (ModelState.IsValid)
             {
+                if (imageFile != null && imageFile.Length > 0)
+                {
+                    // Gerar um nome único para o arquivo
+                    string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+
+                    // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+                    // Salvar o arquivo no servidor
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+
+                    // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
+                    product.imagePath = fileName;
+                }
+                else
+                {
+                    product.imagePath = "default-c.png";
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id", product.seasonFK);
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "description", product.seasonFK);
             return View(product);
         }
 
@@ -83,7 +107,7 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
-            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id", product.seasonFK);
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "description", product.seasonFK);
             return View(product);
         }
 

@@ -54,15 +54,15 @@ namespace DW_Final_Project.Data
 			);
 
 			builder.Entity<Product>().HasData(
-				new Product { id = 1, name="T-Shirt Branca", description="T-shirt branca básica",quantity=10,price=5.0, imagePath="default-c.png", seasonFK=2},
-				new Product { id = 2, name="T-Shirt Cinza", description="T-shirt cinza básica",quantity=10,price=5.0, imagePath = "default-c.png", seasonFK =2},
-				new Product { id = 3, name="T-Shirt Azul", description="T-shirt azul básica",quantity=10,price=5.0, imagePath = "default-c.png", seasonFK=2},
-				new Product { id = 4, name="Hoodie Vermelho", description="Hoddie Vermelho básico",quantity=20,price=15.0, imagePath = "default-c.png", seasonFK =4},
-				new Product { id = 5, name= "Hoodie Azul", description= "Hoddie Azul básico", quantity=20,price=15.0, imagePath = "default-c.png", seasonFK =4},
-				new Product { id = 6, name= "Hoodie Amarelo", description= "Hoddie Amarelo básico", quantity=20,price=15.0, imagePath = "default-c.png", seasonFK =4},
-				new Product { id = 7, name="Camisola Branca", description="Camisola branca manga comprida básica",quantity=10,price=5.0, imagePath = "default-c.png", seasonFK =2},
-				new Product { id = 8, name= "Camisola Preta", description= "Camisola preta manga comprida básica", quantity=4,price=7.49, imagePath = "default-c.png", seasonFK =1},
-				new Product { id = 9, name= "Camisola Rosa", description= "Camisola rosa manga comprida básica", quantity=4,price=7.49, imagePath = "default-c.png", seasonFK =1}
+				new Product { id = 1, name="T-Shirt Branca", description="T-shirt branca básica",quantity=10,price=5.0M, imagePath="default-c.png", seasonFK=2},
+				new Product { id = 2, name="T-Shirt Cinza", description="T-shirt cinza básica",quantity=10,price=5.0M, imagePath = "default-c.png", seasonFK =2},
+				new Product { id = 3, name="T-Shirt Azul", description="T-shirt azul básica",quantity=10,price=5.0M, imagePath = "default-c.png", seasonFK=2},
+				new Product { id = 4, name="Hoodie Vermelho", description="Hoddie Vermelho básico",quantity=20,price=15.0M, imagePath = "default-c.png", seasonFK =4},
+				new Product { id = 5, name= "Hoodie Azul", description= "Hoddie Azul básico", quantity=20,price=15.0M, imagePath = "default-c.png", seasonFK =4},
+				new Product { id = 6, name= "Hoodie Amarelo", description= "Hoddie Amarelo básico", quantity=20,price=15.0M, imagePath = "default-c.png", seasonFK =4},
+				new Product { id = 7, name="Camisola Branca", description="Camisola branca manga comprida básica",quantity=10,price=5.0M, imagePath = "default-c.png", seasonFK =2},
+				new Product { id = 8, name= "Camisola Preta", description= "Camisola preta manga comprida básica", quantity=4,price=7.49M, imagePath = "default-c.png", seasonFK =1},
+				new Product { id = 9, name= "Camisola Rosa", description= "Camisola rosa manga comprida básica", quantity=4,price=7.49M, imagePath = "default-c.png", seasonFK =1}
 			);
         }
         // ********************************************

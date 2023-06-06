@@ -25,8 +25,9 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Preço Total")]
-        [RegularExpression("^[0-9.]+$", ErrorMessage = "Tem de escrever um {0} válido")]
-        public double totalPrice { get; set; }
+        [RegularExpression("^[0-9,.]+$", ErrorMessage = "Insira um {0} válido")]
+        [DataType(DataType.Currency, ErrorMessage = "Insira um {0} válido")]
+        public decimal totalPrice { get; set; }
 		
 
 		/// <summary>

@@ -39,15 +39,17 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Quantidade")]
-		public int quantity { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "A {0} mínima é 0.")]
+        public int quantity { get; set; }
 
 		/// <summary>
 		/// Preço unitário de um produto
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Preço")]
-        [RegularExpression("^[0-9.]+$", ErrorMessage = "Tem de escrever um {0} válido")]
-        public double price { get; set; }
+		[RegularExpression("^[0-9,.]+$",ErrorMessage ="Insira um {0} válido")]
+		[DataType(DataType.Currency,ErrorMessage ="Insira um {0} válido")]
+        public decimal price { get; set; }
 
         /// <summary>
         /// Caminho de uma imagem de um produto
