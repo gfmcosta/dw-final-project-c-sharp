@@ -207,6 +207,7 @@ namespace DW_Final_Project.Migrations
                     description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     quantity = table.Column<int>(type: "int", nullable: false),
                     price = table.Column<double>(type: "float", nullable: false),
+                    imagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     seasonFK = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -267,26 +268,6 @@ namespace DW_Final_Project.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product_Image",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    imagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    productFK = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product_Image", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Product_Image_Product_productFK",
-                        column: x => x.productFK,
-                        principalTable: "Product",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Person",
                 columns: table => new
                 {
@@ -298,7 +279,7 @@ namespace DW_Final_Project.Migrations
                     postalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     dataNasc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    imagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    imagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     userFK = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -362,14 +343,29 @@ namespace DW_Final_Project.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "id", "description" },
+                values: new object[,]
+                {
+                    { 1, "T-Shirt" },
+                    { 2, "Sweatshirt" },
+                    { 3, "Hoodie" },
+                    { 4, "Camisola" },
+                    { 5, "Calças" },
+                    { 6, "Calções" },
+                    { 7, "Calçado" },
+                    { 8, "Acessórios" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Product_Season",
                 columns: new[] { "id", "description" },
                 values: new object[,]
                 {
-                    { 1, "Spring" },
-                    { 2, "Summer" },
-                    { 3, "Fall" },
-                    { 4, "Winter" }
+                    { 1, "Primavera" },
+                    { 2, "Verão" },
+                    { 3, "Outono" },
+                    { 4, "Inverno" }
                 });
 
             migrationBuilder.InsertData(
@@ -378,7 +374,43 @@ namespace DW_Final_Project.Migrations
                 values: new object[,]
                 {
                     { 1, "Admin" },
-                    { 2, "Client" }
+                    { 2, "Cliente" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Product",
+                columns: new[] { "id", "description", "imagePath", "name", "price", "quantity", "seasonFK" },
+                values: new object[,]
+                {
+                    { 1, "T-shirt branca básica", null, "T-Shirt Branca", 5.0, 10, 2 },
+                    { 2, "T-shirt cinza básica", null, "T-Shirt Cinza", 5.0, 10, 2 },
+                    { 3, "T-shirt azul básica", null, "T-Shirt Azul", 5.0, 10, 2 },
+                    { 4, "Hoddie Vermelho básico", null, "Hoodie Vermelho", 15.0, 20, 4 },
+                    { 5, "Hoddie Azul básico", null, "Hoodie Azul", 15.0, 20, 4 },
+                    { 6, "Hoddie Amarelo básico", null, "Hoodie Amarelo", 15.0, 20, 4 },
+                    { 7, "Camisola branca manga comprida básica", null, "Camisola Branca", 5.0, 10, 2 },
+                    { 8, "Camisola preta manga comprida básica", null, "Camisola Preta", 7.4900000000000002, 4, 1 },
+                    { 9, "Camisola rosa manga comprida básica", null, "Camisola Rosa", 7.4900000000000002, 4, 1 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "id", "email", "password", "token", "typeFK" },
+                values: new object[,]
+                {
+                    { 1, "goncalo.costa@gmail.com", "7efe01a7a37b674f902aaaa6385f991e72018563f9c4280691bbc593988703d4", null, 1 },
+                    { 2, "joao.goncalves@gmail.com", "622cc9ae3a18440b2288dba66daa9d655af0994ac3f6aecea4b4cf607277bea8", null, 1 },
+                    { 3, "jose.silva@gmail.com", "dad91e6a5a72560ba402a95f2a4cc43f57f2d300a26d417585ae8491a47540cc", null, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Person",
+                columns: new[] { "id", "address", "dataNasc", "gender", "imagePath", "name", "phoneNumber", "postalCode", "userFK" },
+                values: new object[,]
+                {
+                    { 1, "Rua das Flores 31 2D", new DateTime(2003, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified), "M", "default-m", "Gonçalo Costa", "925863873", "2605-141 BELAS", 1 },
+                    { 2, "Rua das Papoilas 21 1Esq", new DateTime(2003, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "M", "default-m", "João Gonçalves", "924665908", "2300-674 TOMAR", 2 },
+                    { 3, "Quinta do Contador 4", new DateTime(1976, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), "M", "default-m", "José Silva", "913765880", "2300-313 TOMAR", 3 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -443,18 +475,12 @@ namespace DW_Final_Project.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Person_userFK",
                 table: "Person",
-                column: "userFK",
-                unique: true);
+                column: "userFK");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_seasonFK",
                 table: "Product",
                 column: "seasonFK");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_Image_productFK",
-                table: "Product_Image",
-                column: "productFK");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_typeFK",
@@ -485,9 +511,6 @@ namespace DW_Final_Project.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderItem");
-
-            migrationBuilder.DropTable(
-                name: "Product_Image");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

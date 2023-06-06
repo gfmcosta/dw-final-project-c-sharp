@@ -48,7 +48,7 @@ namespace DW_Final_Project.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
-            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "id");
+            ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "description");
             return View();
         }
 
@@ -57,8 +57,9 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price,seasonFK")] Product product)
+        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price,imagePath,seasonFK")] Product product)
         {
+            ModelState.Remove("Season");
             if (ModelState.IsValid)
             {
                 _context.Add(product);
@@ -91,7 +92,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,price,seasonFK")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,price,imagePath,seasonFK")] Product product)
         {
             if (id != product.id)
             {

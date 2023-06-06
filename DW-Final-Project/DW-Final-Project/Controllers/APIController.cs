@@ -1,6 +1,8 @@
 ﻿using DW_Final_Project.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -23,7 +25,7 @@ namespace DW_Final_Project.Controllers
             {
                 return BadRequest();
             }
-
+            pwd = EncriptarSenha(pwd);
             var user = await _context.User
                 .Include(u => u.type)
                 .FirstOrDefaultAsync(m => m.email.Equals(email) && m.password.Equals(pwd));
@@ -69,6 +71,24 @@ namespace DW_Final_Project.Controllers
             var serializedUser = JsonSerializer.Serialize(user, options);
 
             return Ok(serializedUser);
+        }
+
+        private string EncriptarSenha(string senha)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(senha);
+                byte[] hash = sha256.ComputeHash(bytes);
+
+                StringBuilder builder = new StringBuilder();
+
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    builder.Append(hash[i].ToString("x2")); // Converte o byte em uma string hexadecimal
+                }
+
+                return builder.ToString();
+            }
         }
     }
 }

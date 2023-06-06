@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DW_Final_Project.Controllers;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DW_Final_Project.Models
@@ -62,7 +63,7 @@ namespace DW_Final_Project.Models
         /// </summary>
         [Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
         [Display(Name = "Data de Nascimento")]
-		public DateTime dataNasc { get; set; }
+        public DateTime dataNasc { get; set; }
 
 		/// <summary>
 		/// Sexo de um utilizador. M para Masculino e F para Feminino

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DW_Final_Project.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230605190037_Removed person from user table")]
-    partial class Removedpersonfromusertable
+    [Migration("20230606150134_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,48 @@ namespace DW_Final_Project.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Category");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            description = "T-Shirt"
+                        },
+                        new
+                        {
+                            id = 2,
+                            description = "Sweatshirt"
+                        },
+                        new
+                        {
+                            id = 3,
+                            description = "Hoodie"
+                        },
+                        new
+                        {
+                            id = 4,
+                            description = "Camisola"
+                        },
+                        new
+                        {
+                            id = 5,
+                            description = "Calças"
+                        },
+                        new
+                        {
+                            id = 6,
+                            description = "Calções"
+                        },
+                        new
+                        {
+                            id = 7,
+                            description = "Calçado"
+                        },
+                        new
+                        {
+                            id = 8,
+                            description = "Acessórios"
+                        });
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Order", b =>
@@ -131,7 +173,6 @@ namespace DW_Final_Project.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("imagePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
@@ -156,6 +197,44 @@ namespace DW_Final_Project.Migrations
                     b.HasIndex("userFK");
 
                     b.ToTable("Person");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            address = "Rua das Flores 31 2D",
+                            dataNasc = new DateTime(2003, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            gender = "M",
+                            imagePath = "default-m",
+                            name = "Gonçalo Costa",
+                            phoneNumber = "925863873",
+                            postalCode = "2605-141 BELAS",
+                            userFK = 1
+                        },
+                        new
+                        {
+                            id = 2,
+                            address = "Rua das Papoilas 21 1Esq",
+                            dataNasc = new DateTime(2003, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            gender = "M",
+                            imagePath = "default-m",
+                            name = "João Gonçalves",
+                            phoneNumber = "924665908",
+                            postalCode = "2300-674 TOMAR",
+                            userFK = 2
+                        },
+                        new
+                        {
+                            id = 3,
+                            address = "Quinta do Contador 4",
+                            dataNasc = new DateTime(1976, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            gender = "M",
+                            imagePath = "default-m",
+                            name = "José Silva",
+                            phoneNumber = "913765880",
+                            postalCode = "2300-313 TOMAR",
+                            userFK = 3
+                        });
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Product", b =>
@@ -168,6 +247,9 @@ namespace DW_Final_Project.Migrations
 
                     b.Property<string>("description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("imagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
@@ -188,28 +270,89 @@ namespace DW_Final_Project.Migrations
                     b.HasIndex("seasonFK");
 
                     b.ToTable("Product");
-                });
 
-            modelBuilder.Entity("DW_Final_Project.Models.Product_Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("imagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("productFK")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("productFK");
-
-                    b.ToTable("Product_Image");
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            description = "T-shirt branca básica",
+                            name = "T-Shirt Branca",
+                            price = 5.0,
+                            quantity = 10,
+                            seasonFK = 2
+                        },
+                        new
+                        {
+                            id = 2,
+                            description = "T-shirt cinza básica",
+                            name = "T-Shirt Cinza",
+                            price = 5.0,
+                            quantity = 10,
+                            seasonFK = 2
+                        },
+                        new
+                        {
+                            id = 3,
+                            description = "T-shirt azul básica",
+                            name = "T-Shirt Azul",
+                            price = 5.0,
+                            quantity = 10,
+                            seasonFK = 2
+                        },
+                        new
+                        {
+                            id = 4,
+                            description = "Hoddie Vermelho básico",
+                            name = "Hoodie Vermelho",
+                            price = 15.0,
+                            quantity = 20,
+                            seasonFK = 4
+                        },
+                        new
+                        {
+                            id = 5,
+                            description = "Hoddie Azul básico",
+                            name = "Hoodie Azul",
+                            price = 15.0,
+                            quantity = 20,
+                            seasonFK = 4
+                        },
+                        new
+                        {
+                            id = 6,
+                            description = "Hoddie Amarelo básico",
+                            name = "Hoodie Amarelo",
+                            price = 15.0,
+                            quantity = 20,
+                            seasonFK = 4
+                        },
+                        new
+                        {
+                            id = 7,
+                            description = "Camisola branca manga comprida básica",
+                            name = "Camisola Branca",
+                            price = 5.0,
+                            quantity = 10,
+                            seasonFK = 2
+                        },
+                        new
+                        {
+                            id = 8,
+                            description = "Camisola preta manga comprida básica",
+                            name = "Camisola Preta",
+                            price = 7.4900000000000002,
+                            quantity = 4,
+                            seasonFK = 1
+                        },
+                        new
+                        {
+                            id = 9,
+                            description = "Camisola rosa manga comprida básica",
+                            name = "Camisola Rosa",
+                            price = 7.4900000000000002,
+                            quantity = 4,
+                            seasonFK = 1
+                        });
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Product_Season", b =>
@@ -232,22 +375,22 @@ namespace DW_Final_Project.Migrations
                         new
                         {
                             id = 1,
-                            description = "Spring"
+                            description = "Primavera"
                         },
                         new
                         {
                             id = 2,
-                            description = "Summer"
+                            description = "Verão"
                         },
                         new
                         {
                             id = 3,
-                            description = "Fall"
+                            description = "Outono"
                         },
                         new
                         {
                             id = 4,
-                            description = "Winter"
+                            description = "Inverno"
                         });
                 });
 
@@ -277,7 +420,7 @@ namespace DW_Final_Project.Migrations
                         new
                         {
                             id = 2,
-                            description = "Client"
+                            description = "Cliente"
                         });
                 });
 
@@ -308,6 +451,29 @@ namespace DW_Final_Project.Migrations
                     b.HasIndex("typeFK");
 
                     b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1,
+                            email = "goncalo.costa@gmail.com",
+                            password = "7efe01a7a37b674f902aaaa6385f991e72018563f9c4280691bbc593988703d4",
+                            typeFK = 1
+                        },
+                        new
+                        {
+                            id = 2,
+                            email = "joao.goncalves@gmail.com",
+                            password = "622cc9ae3a18440b2288dba66daa9d655af0994ac3f6aecea4b4cf607277bea8",
+                            typeFK = 1
+                        },
+                        new
+                        {
+                            id = 3,
+                            email = "jose.silva@gmail.com",
+                            password = "dad91e6a5a72560ba402a95f2a4cc43f57f2d300a26d417585ae8491a47540cc",
+                            typeFK = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -579,17 +745,6 @@ namespace DW_Final_Project.Migrations
                     b.Navigation("Season");
                 });
 
-            modelBuilder.Entity("DW_Final_Project.Models.Product_Image", b =>
-                {
-                    b.HasOne("DW_Final_Project.Models.Product", "product")
-                        .WithMany("productImageList")
-                        .HasForeignKey("productFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("product");
-                });
-
             modelBuilder.Entity("DW_Final_Project.Models.User", b =>
                 {
                     b.HasOne("DW_Final_Project.Models.Type", "type")
@@ -665,8 +820,6 @@ namespace DW_Final_Project.Migrations
             modelBuilder.Entity("DW_Final_Project.Models.Product", b =>
                 {
                     b.Navigation("orderItemList");
-
-                    b.Navigation("productImageList");
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Product_Season", b =>

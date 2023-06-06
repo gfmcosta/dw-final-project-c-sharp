@@ -10,7 +10,6 @@ namespace DW_Final_Project.Models
 	{
 		public Product() {
 			orderItemList = new HashSet<OrderItem>();
-			productImageList = new HashSet<Product_Image>();
 			categoryList = new HashSet<Category>();
 		}
 
@@ -23,14 +22,14 @@ namespace DW_Final_Project.Models
 		/// Nome de um produto
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
-        [RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ ]+$", ErrorMessage = "Tem de escrever um {0} válido")]
+        [RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ -]+$", ErrorMessage = "Tem de escrever um {0} válido")]
         [Display(Name = "Nome")]
 		public string name { get; set; }
 
         /// <summary>
         /// Descrição de um produto
         /// </summary>
-        [RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ ]+$", ErrorMessage = "Tem de escrever uma {0} válida")]
+        [RegularExpression("^[a-zçãõáéíóúA-ZÇÃÕÁÉÍÓÚ -.,]+$", ErrorMessage = "Tem de escrever uma {0} válida")]
         [Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Descrição")]
 		public string description { get; set; }
@@ -51,6 +50,11 @@ namespace DW_Final_Project.Models
         public double price { get; set; }
 
         /// <summary>
+        /// Caminho de uma imagem de um produto
+        /// </summary>
+        public string? imagePath { get; set; }
+
+        /// <summary>
         /// FK Season
         /// </summary>
         [ForeignKey(nameof(Season))]
@@ -61,10 +65,6 @@ namespace DW_Final_Project.Models
         /// Lista de produtos numa ordem/compra
         /// </summary>
         public ICollection<OrderItem> orderItemList { get; set; }
-		/// <summary>
-		/// Lista de Imagens de um produto
-		/// </summary>
-		public ICollection<Product_Image> productImageList { get; set; }
 		/// <summary>
 		/// Lista de categorias de um produto
 		/// </summary>

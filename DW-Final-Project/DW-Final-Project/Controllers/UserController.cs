@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace DW_Final_Project.Controllers
 {
@@ -64,6 +66,8 @@ namespace DW_Final_Project.Controllers
             ModelState.Remove("type");
             if (ModelState.IsValid)
             {
+                string pwd = EncriptarSenha(user.password);
+                user.password = pwd;    
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -101,10 +105,14 @@ namespace DW_Final_Project.Controllers
                 return NotFound();
             }
 
+            Models.Type tipo = await _context.Type.FindAsync(user.typeFK);
+            user.type = tipo;
+            ModelState.Remove("type");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    user.password = EncriptarSenha(user.password);
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -166,6 +174,23 @@ namespace DW_Final_Project.Controllers
         private bool UserExists(int id)
         {
           return (_context.User?.Any(e => e.id == id)).GetValueOrDefault();
+        }
+        private string EncriptarSenha(string senha)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(senha);
+                byte[] hash = sha256.ComputeHash(bytes);
+
+                StringBuilder builder = new StringBuilder();
+
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    builder.Append(hash[i].ToString("x2")); // Converte o byte em uma string hexadecimal
+                }
+
+                return builder.ToString();
+            }
         }
     }
 }
