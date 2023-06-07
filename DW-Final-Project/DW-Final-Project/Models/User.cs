@@ -18,7 +18,7 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Email")]
-		[EmailAddress]
+		[EmailAddress(ErrorMessage ="Insira um {0} válido")]
 		public string email { get; set; }
 
 		/// <summary>

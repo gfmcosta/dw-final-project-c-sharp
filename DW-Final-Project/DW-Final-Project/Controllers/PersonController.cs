@@ -107,14 +107,50 @@ namespace DW_Final_Project.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person) {
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile) {
             if (id != person.id) {
                 return NotFound();
             }
+            ModelState.Remove("user");
+            ModelState.Remove("imageFile");
+            ModelState.Remove("imagePath");
+            User user = await _context.User.FindAsync(person.userFK);
+            Person existingPerson = await _context.Person.FindAsync(id);
+
+            // Copiar as propriedades atualizadas para a entidade existente
+            existingPerson.id = person.id;
+            existingPerson.name = person.name;
+            existingPerson.phoneNumber = person.phoneNumber;
+            existingPerson.address = person.address;
+            existingPerson.postalCode = person.postalCode;
+            existingPerson.dataNasc = person.dataNasc;
+            existingPerson.gender = person.gender;
+            existingPerson.userFK = person.userFK;
+            existingPerson.user = user;
+
 
             if (ModelState.IsValid) {
                 try {
-                    _context.Update(person);
+
+                    _context.Entry(person).State = EntityState.Detached;
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        // Gerar um nome único para o arquivo
+                        string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+
+                        // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+                        // Salvar o arquivo no servidor
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
+                        existingPerson.imagePath = fileName;
+                    }
+                    _context.Update(existingPerson);
                     await _context.SaveChangesAsync();
                 } catch (DbUpdateConcurrencyException) {
                     if (!PersonExists(person.id)) {
