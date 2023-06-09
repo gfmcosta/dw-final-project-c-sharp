@@ -73,6 +73,54 @@ namespace DW_Final_Project.Controllers
             return Ok(serializedUser);
         }
 
+        //GET: Get All Products
+        [HttpGet("/API/Products")]
+        public async Task<IActionResult> Products()
+        {
+            var products = await _context.Product.ToListAsync();
+
+            if (products == null)
+            {
+                return Ok();
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+
+            var serializedUser = JsonSerializer.Serialize(products, options);
+
+            return Ok(serializedUser);
+        }
+
+        //GET: Get All Products
+        [HttpGet("/API/Profile/{email}")]
+        public async Task<IActionResult> Profile(string email)
+        {
+            if (email == null)
+            {
+                return BadRequest();
+            }
+            var person = await _context.Person
+                .Include(u => u.user)
+                .FirstOrDefaultAsync(m => m.user.email==email);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+
+            var serializedUser = JsonSerializer.Serialize(person, options);
+
+            return Ok(serializedUser);
+        }
+
         private string EncriptarSenha(string senha)
         {
             using (SHA256 sha256 = SHA256.Create())
@@ -90,5 +138,7 @@ namespace DW_Final_Project.Controllers
                 return builder.ToString();
             }
         }
+
+
     }
 }

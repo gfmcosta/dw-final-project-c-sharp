@@ -33,7 +33,7 @@ namespace DW_Final_Project.Data
             );
 			builder.Entity<User>().HasData(
 				new User { id = 1, email = "goncalo.costa@gmail.com", password = "7efe01a7a37b674f902aaaa6385f991e72018563f9c4280691bbc593988703d4", typeFK = 1},
-				new User { id = 2, email = "joao.goncalves@gmail.com", password = "622cc9ae3a18440b2288dba66daa9d655af0994ac3f6aecea4b4cf607277bea8", typeFK = 1},
+				new User { id = 2, email = "joao.goncalves@gmail.com", password = "63831aef4d4c7fc4f58d430ae5cf5fb6d9b04b475dcbd8df6a5b57db6ae841ee", typeFK = 1},
 				new User { id = 3, email = "jose.silva@gmail.com", password = "dad91e6a5a72560ba402a95f2a4cc43f57f2d300a26d417585ae8491a47540cc", typeFK = 2}
             );
 			builder.Entity<Person>().HasData(
