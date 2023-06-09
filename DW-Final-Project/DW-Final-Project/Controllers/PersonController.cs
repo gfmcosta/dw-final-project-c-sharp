@@ -128,7 +128,6 @@ namespace DW_Final_Project.Controllers {
             existingPerson.userFK = person.userFK;
             existingPerson.user = user;
 
-
             if (ModelState.IsValid) {
                 try {
 
