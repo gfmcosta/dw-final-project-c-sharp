@@ -19,11 +19,6 @@
                 <span asp-validation-for="quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="totalPrice" class="control-label"></label>
-                <input asp-for="totalPrice" class="form-control" />
-                <span asp-validation-for="totalPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="orderFK" class="control-label"></label>
                 <select asp-for="orderFK" class="form-control" asp-items="ViewBag.orderFK"></select>
                 <span asp-validation-for="orderFK" class="text-danger"></span>

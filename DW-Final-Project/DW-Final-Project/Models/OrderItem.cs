@@ -18,22 +18,37 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "A {0} é de preenchimento obrigatório")]
 		[Display(Name = "Quantidade")]
-		public int quantity { get; set; }
+        [RegularExpression("^[1-9][0-9]*",
+           ErrorMessage = "A {0} tem de ser maior do que um")]
 
-		/// <summary>
-		/// Preço total de um determinado item numa ordem/compra (totalPrice = quantidade * preco/unid
-		/// </summary>
-		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
-		[Display(Name = "Preço Total")]
-        [RegularExpression("^[0-9,.]+$", ErrorMessage = "Insira um {0} válido")]
-        [DataType(DataType.Currency, ErrorMessage = "Insira um {0} válido")]
+        public int quantity { get; set; }
+
+        /// <summary>
+        /// Preço total de um determinado item numa ordem/compra (totalPrice = quantidade * preco/unid
+        /// </summary>
+        /// <summary>
+        /// Preço unitário de um produto
+        /// </summary>
+        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
+        [Display(Name = "Preço")]
         public decimal totalPrice { get; set; }
-		
 
-		/// <summary>
-		/// FK Order
-		/// </summary>
-		[ForeignKey(nameof(order))]
+        /// <summary>
+        /// Campo auxiliar de introdução do Preço de um produto
+        /// </summary>
+        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
+        [Display(Name = "Preço")]
+        [RegularExpression("[0-9]+[.,]?[0-9]{1,2}",
+           ErrorMessage = "No {0} só pode usar algarismos, e se desejar," +
+           " duas casas decimais no final.")]
+        [NotMapped]
+        public string totalPriceAux { get; set; }
+
+
+        /// <summary>
+        /// FK Order
+        /// </summary>
+        [ForeignKey(nameof(order))]
 		public int orderFK { get; set; }
 		public Order order { get; set; }
 		

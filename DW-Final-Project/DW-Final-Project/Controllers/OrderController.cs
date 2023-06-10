@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using DW_Final_Project.Migrations;
 
 namespace DW_Final_Project.Controllers
 {
@@ -48,7 +49,7 @@ namespace DW_Final_Project.Controllers
         // GET: Order/Create
         public IActionResult Create()
         {
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "address");
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "name");
             return View();
         }
 
@@ -57,15 +58,19 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,price,IVA,personFK")] Order order)
+        public async Task<IActionResult> Create([Bind("id,personFK")] Order order)
         {
+            order.IVA = 23;
+            order.price = 0;
+            ModelState.Remove("priceAux");
+            ModelState.Remove("Person");
             if (ModelState.IsValid)
             {
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "address", order.personFK);
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "name", order.personFK);
             return View(order);
         }
 
@@ -82,7 +87,8 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "address", order.personFK);
+            order.priceAux = order.price.ToString();
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "name", order.personFK);
             return View(order);
         }
 
@@ -91,18 +97,33 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,price,IVA,personFK")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("id,priceAux,IVA,personFK")] Order order)
         {
-            if (id != order.id)
+                if (id != order.id)
             {
                 return NotFound();
             }
-
+            Order existingOrder = await _context.Order.FindAsync(id);
+            existingOrder.id = order.id;
+            existingOrder.IVA = order.IVA;
+            existingOrder.personFK = order.personFK;
+            // atribuir os dados do PrecoCompraAux ao PrecoCompra
+            if (!string.IsNullOrEmpty(order.priceAux)) {
+            
+                existingOrder.price =
+                   Convert.ToDecimal(order.priceAux
+                                            .Replace('.', ','));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+            }
+            ModelState.Remove("Person");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(order);
+                    _context.Update(existingOrder);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -118,7 +139,7 @@ namespace DW_Final_Project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["personFK"] = new SelectList(_context.Person, "id", "address", order.personFK);
+            ViewData["personFK"] = new SelectList(_context.Person, "id", "name", order.personFK);
             return View(order);
         }
 

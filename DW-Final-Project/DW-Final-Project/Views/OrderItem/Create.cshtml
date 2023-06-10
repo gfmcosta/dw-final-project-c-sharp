@@ -14,13 +14,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="quantity" class="control-label"></label>
-                <input asp-for="quantity" class="form-control" />
+                <input asp-for="quantity" min="1" class="form-control" />
                 <span asp-validation-for="quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="totalPrice" class="control-label"></label>
-                <input asp-for="totalPrice" class="form-control" />
-                <span asp-validation-for="totalPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="orderFK" class="control-label"></label>

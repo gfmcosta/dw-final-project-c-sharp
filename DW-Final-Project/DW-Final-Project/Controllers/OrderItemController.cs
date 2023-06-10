@@ -50,7 +50,7 @@ namespace DW_Final_Project.Controllers
         public IActionResult Create()
         {
             ViewData["orderFK"] = new SelectList(_context.Order, "id", "id");
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description");
+            ViewData["productFK"] = new SelectList(_context.Product, "id", "name");
             return View();
         }
 
@@ -59,16 +59,25 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,quantity,totalPrice,orderFK,productFK")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("quantity,orderFK,productFK")] OrderItem orderItem)
         {
+            ModelState.Remove("order");
+            ModelState.Remove("product");
+            ModelState.Remove("totalPriceAux");
+            Product p = await _context.Product.FindAsync(orderItem.productFK);
+            orderItem.totalPrice = p.price * orderItem.quantity;
             if (ModelState.IsValid)
             {
                 _context.Add(orderItem);
                 await _context.SaveChangesAsync();
+                Order o = await _context.Order.FindAsync(orderItem.orderFK);
+                o.price += orderItem.totalPrice;
+                _context.Update(o);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["orderFK"] = new SelectList(_context.Order, "id", "id", orderItem.orderFK);
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description", orderItem.productFK);
+            ViewData["productFK"] = new SelectList(_context.Product, "id", "name", orderItem.productFK);
             return View(orderItem);
         }
 
@@ -86,7 +95,7 @@ namespace DW_Final_Project.Controllers
                 return NotFound();
             }
             ViewData["orderFK"] = new SelectList(_context.Order, "id", "id", orderItem.orderFK);
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description", orderItem.productFK);
+            ViewData["productFK"] = new SelectList(_context.Product, "id", "name", orderItem.productFK);
             return View(orderItem);
         }
 
@@ -95,7 +104,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,quantity,totalPrice,orderFK,productFK")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("id,quantity,totalPriceAux,orderFK,productFK")] OrderItem orderItem)
         {
             if (id != orderItem.id)
             {
@@ -123,7 +132,7 @@ namespace DW_Final_Project.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["orderFK"] = new SelectList(_context.Order, "id", "id", orderItem.orderFK);
-            ViewData["productFK"] = new SelectList(_context.Product, "id", "description", orderItem.productFK);
+            ViewData["productFK"] = new SelectList(_context.Product, "id", "name", orderItem.productFK);
             return View(orderItem);
         }
 
