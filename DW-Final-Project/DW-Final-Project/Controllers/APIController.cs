@@ -2,6 +2,7 @@
 using DW_Final_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -140,7 +141,33 @@ namespace DW_Final_Project.Controllers
                 person.postalCode= personUpdateModel.postalCode;
                 person.dataNasc = personUpdateModel.dataNasc;
                 person.gender = personUpdateModel.gender;
-                person.imagePath = personUpdateModel.imagePath;
+
+                if (personUpdateModel.imagePath.StartsWith("data:image/"))
+                {
+                    int startIndex = personUpdateModel.imagePath.IndexOf("/") + 1; // Encontra a posição do primeiro caractere após "/"
+                    int endIndex = personUpdateModel.imagePath.IndexOf(";"); // Encontra a posição do último caractere antes de ";"
+                    string extFoto = personUpdateModel.imagePath.Substring(startIndex, endIndex - startIndex);
+
+                    // Remova o prefixo "data:image/jpeg;base64," da string
+                    string base64String = personUpdateModel.imagePath.Substring(personUpdateModel.imagePath.IndexOf(',') + 1);
+
+                    // Decodifique a string base64 em um array de bytes
+                    byte[] imagemBytes = Convert.FromBase64String(base64String);
+                    //converter byte[] para ficheiro
+                    string nomeArquivo = Guid.NewGuid().ToString() + "_" + person.id+"."+extFoto;
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", nomeArquivo);
+
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                    {
+                        fs.Write(imagemBytes, 0, imagemBytes.Length);
+                    }
+                    person.imagePath = nomeArquivo;
+                }
+                else
+                {
+                    //mesma imagem
+                    person.imagePath = personUpdateModel.imagePath;
+                }
 
                 _context.Update(person);
                 _context.SaveChanges();
