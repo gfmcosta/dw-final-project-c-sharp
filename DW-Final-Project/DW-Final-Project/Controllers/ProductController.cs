@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DW_Final_Project.Controllers
 {
@@ -58,10 +59,20 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,description,quantity,price,imagePath,seasonFK")] Product product, string precoD, IFormFile imageFile)
+        public async Task<IActionResult> Create([Bind("id,name,description,quantity,priceAux,imagePath,seasonFK")] Product product, IFormFile imageFile)
         {
-            CultureInfo culture = new CultureInfo("en-US"); // Defina a cultura desejada
-            product.price = decimal.Parse(precoD,culture);
+
+            // atribuir os dados do PrecoCompraAux ao PrecoCompra
+            if (!string.IsNullOrEmpty(product.priceAux))
+            {
+                product.price =
+                   Convert.ToDecimal(product.priceAux
+                                            .Replace('.', ','));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+            }
             ModelState.Remove("Season");
             ModelState.Remove("imageFile");
             if (ModelState.IsValid)
@@ -108,6 +119,7 @@ namespace DW_Final_Project.Controllers
             {
                 return NotFound();
             }
+            product.priceAux = product.price.ToString();
             ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "description", product.seasonFK);
             return View(product);
         }
@@ -117,21 +129,32 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,price,imagePath,seasonFK")] Product product, string precoD, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,priceAux,imagePath,seasonFK")] Product product, IFormFile imageFile)
         {
             if (id != product.id)
             {
                 return NotFound();
             }
-            CultureInfo culture = new CultureInfo("en-US"); // Defina a cultura desejada
             ModelState.Remove("Season");
             ModelState.Remove("imageFile");
             Product existingProduct = await _context.Product.FindAsync(id);
             existingProduct.id = product.id;
             existingProduct.name = product.name;
-            existingProduct.price = decimal.Parse(precoD, culture);
             existingProduct.description = product.description;
             existingProduct.quantity = product.quantity;
+            // atribuir os dados do PrecoCompraAux ao PrecoCompra
+            if (!string.IsNullOrEmpty(product.priceAux))
+            {
+                existingProduct.price =
+                   Convert.ToDecimal(product.priceAux
+                                            .Replace('.', ','));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+            }
+
+
             if (ModelState.IsValid)
             {
                 try

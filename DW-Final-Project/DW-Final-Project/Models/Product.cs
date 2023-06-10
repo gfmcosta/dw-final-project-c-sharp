@@ -47,10 +47,18 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		[Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
 		[Display(Name = "Preço")]
-		[RegularExpression("^[0-9,.]+$",ErrorMessage ="Insira um {0} válido")]
-		[DataType(DataType.Currency,ErrorMessage ="Insira um {0} válido")]
         public decimal price { get; set; }
 
+        /// <summary>
+        /// Campo auxiliar de introdução do Preço de um produto
+        /// </summary>
+        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
+        [Display(Name = "Preço")]
+        [RegularExpression("[0-9]+[.,]?[0-9]{1,2}",
+           ErrorMessage = "No {0} só pode usar algarismos, e se desejar," +
+           " duas casas decimais no final.")]
+        [NotMapped]
+        public string priceAux { get; set; }
         /// <summary>
         /// Caminho de uma imagem de um produto
         /// </summary>
