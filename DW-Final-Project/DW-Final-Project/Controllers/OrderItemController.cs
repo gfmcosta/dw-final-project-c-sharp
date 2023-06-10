@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DW_Final_Project.Controllers
 {
@@ -104,18 +105,35 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,quantity,totalPriceAux,orderFK,productFK")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("id,quantity,productFK")] OrderItem orderItem)
         {
             if (id != orderItem.id)
             {
                 return NotFound();
             }
-
+            OrderItem olderItem = await _context.OrderItem.FindAsync(id);
+            OrderItem existingOrderItem = await _context.OrderItem.FindAsync(id);
+            existingOrderItem.quantity = orderItem.quantity;
+            existingOrderItem.orderFK = olderItem.orderFK;
+            existingOrderItem.productFK = orderItem.productFK;
+            existingOrderItem.quantity = orderItem.quantity;
+            Product oldP = await _context.Product.FindAsync(olderItem.productFK);
+            Product newP = await _context.Product.FindAsync(existingOrderItem.productFK);
+            decimal preco = oldP.price * olderItem.quantity;
+            ModelState.Remove("order");
+            ModelState.Remove("product");
+            ModelState.Remove("totalPriceAux");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(orderItem);
+                    Order o = await _context.Order.FindAsync(existingOrderItem.orderFK);
+                    o.price -= preco;
+                    o.price += existingOrderItem.quantity * newP.price;
+                    existingOrderItem.totalPrice = existingOrderItem.quantity * newP.price;
+                    _context.Update(existingOrderItem);
+                    await _context.SaveChangesAsync();
+                    _context.Update(o);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -170,14 +188,14 @@ namespace DW_Final_Project.Controllers
             {
                 _context.OrderItem.Remove(orderItem);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool OrderItemExists(int id)
         {
-          return (_context.OrderItem?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.OrderItem?.Any(e => e.id == id)).GetValueOrDefault();
         }
     }
 }
