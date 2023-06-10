@@ -1,4 +1,5 @@
 ﻿using DW_Final_Project.Data;
+using DW_Final_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -120,6 +121,36 @@ namespace DW_Final_Project.Controllers
 
             return Ok(serializedUser);
         }
+
+        //POST: User Register
+        [HttpPost("/API/updateProfile/{email}")]
+        public IActionResult UpdatePerson(string email, [FromBody] Person personUpdateModel)
+        {
+            // Lógica para atualizar os dados da pessoa com o email fornecido
+
+            // Exemplo de implementação básica para atualizar os dados da pessoa
+            var user = _context.User.FirstOrDefault(u => u.email == email);
+            var person = _context.Person.FirstOrDefault(p => p.userFK == user.id);
+
+            if (person != null)
+            {
+                person.name = personUpdateModel.name;
+                person.phoneNumber = personUpdateModel.phoneNumber;
+                person.address = personUpdateModel.address;
+                person.postalCode= personUpdateModel.postalCode;
+                person.dataNasc = personUpdateModel.dataNasc;
+                person.gender = personUpdateModel.gender;
+                person.imagePath = personUpdateModel.imagePath;
+
+                _context.Update(person);
+                _context.SaveChanges();
+
+                return Ok("Dados da pessoa atualizados com sucesso.");
+            }
+
+            return NotFound("Pessoa não encontrada.");
+        }
+
 
         private string EncriptarSenha(string senha)
         {
