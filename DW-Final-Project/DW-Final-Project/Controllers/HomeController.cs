@@ -13,10 +13,10 @@ namespace DW_Final_Project.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public IActionResult Splash()
 		{
-			return View();
-		}
+            return View("~/Views/App/Splash.cshtml");
+        }
 
 		public IActionResult Privacy()
 		{
