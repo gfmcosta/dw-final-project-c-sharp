@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.size)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.quantity)
             </th>
             <th>
@@ -30,6 +33,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.size)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.quantity)
             </td>

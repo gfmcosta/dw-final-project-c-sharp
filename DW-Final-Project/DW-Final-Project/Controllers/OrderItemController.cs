@@ -60,7 +60,7 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("quantity,orderFK,productFK")] OrderItem orderItem)
+        public async Task<IActionResult> Create([Bind("size,quantity,orderFK,productFK")] OrderItem orderItem)
         {
             ModelState.Remove("order");
             ModelState.Remove("product");
@@ -105,20 +105,23 @@ namespace DW_Final_Project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,quantity,productFK")] OrderItem orderItem)
+        public async Task<IActionResult> Edit(int id, [Bind("id,size,quantity,productFK")] OrderItem orderItem)
         {
             if (id != orderItem.id)
             {
                 return NotFound();
             }
             OrderItem olderItem = await _context.OrderItem.FindAsync(id);
+            decimal precoApagar = olderItem.totalPrice;
             OrderItem existingOrderItem = await _context.OrderItem.FindAsync(id);
             existingOrderItem.quantity = orderItem.quantity;
+            existingOrderItem.size = orderItem.size;
             existingOrderItem.orderFK = olderItem.orderFK;
             existingOrderItem.productFK = orderItem.productFK;
             existingOrderItem.quantity = orderItem.quantity;
             Product oldP = await _context.Product.FindAsync(olderItem.productFK);
             Product newP = await _context.Product.FindAsync(existingOrderItem.productFK);
+            existingOrderItem.totalPrice = orderItem.quantity * newP.price;
             decimal preco = oldP.price * olderItem.quantity;
             ModelState.Remove("order");
             ModelState.Remove("product");
@@ -128,9 +131,8 @@ namespace DW_Final_Project.Controllers
                 try
                 {
                     Order o = await _context.Order.FindAsync(existingOrderItem.orderFK);
-                    o.price -= preco;
-                    o.price += existingOrderItem.quantity * newP.price;
-                    existingOrderItem.totalPrice = existingOrderItem.quantity * newP.price;
+                    o.price -= precoApagar;
+                    o.price += existingOrderItem.totalPrice;
                     _context.Update(existingOrderItem);
                     await _context.SaveChangesAsync();
                     _context.Update(o);
@@ -187,6 +189,9 @@ namespace DW_Final_Project.Controllers
             if (orderItem != null)
             {
                 _context.OrderItem.Remove(orderItem);
+                Order o = await _context.Order.FindAsync(orderItem.orderFK);
+                o.price -= orderItem.totalPrice;
+                _context.Order.Update(o);
             }
 
             await _context.SaveChangesAsync();

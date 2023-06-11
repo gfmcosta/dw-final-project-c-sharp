@@ -13,6 +13,13 @@ namespace DW_Final_Project.Models
 		/// </summary>
 		public int id { get; set; }
 
+
+        [Required(ErrorMessage = "O {0} é de preenchimento obrigatório")]
+        [RegularExpression("[SML]{1}",
+         ErrorMessage = "O {0} deve ter apenas um caracter.")]
+        [Display(Name = "Tamanho")]
+        public string size { get; set; }
+
 		/// <summary>
 		/// Quantidade de um item numa ordem/compra
 		/// </summary>
@@ -20,7 +27,6 @@ namespace DW_Final_Project.Models
 		[Display(Name = "Quantidade")]
         [RegularExpression("^[1-9][0-9]*",
            ErrorMessage = "A {0} tem de ser maior do que um")]
-
         public int quantity { get; set; }
 
         /// <summary>
