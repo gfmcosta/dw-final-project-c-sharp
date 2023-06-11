@@ -97,6 +97,27 @@ namespace DW_Final_Project.Controllers
         }
 
         //GET: Get All Products
+        [HttpGet("/API/Products/{id}")]
+        public async Task<IActionResult> getProductById(int id)
+        {
+            var product = await _context.Product.FindAsync(id);
+
+            if (product == null)
+            {
+                return Ok();
+            }
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+
+            var serializedUser = JsonSerializer.Serialize(product, options);
+
+            return Ok(serializedUser);
+        }
+
+        //GET: Get Profile
         [HttpGet("/API/Profile/{email}")]
         public async Task<IActionResult> Profile(string email)
         {

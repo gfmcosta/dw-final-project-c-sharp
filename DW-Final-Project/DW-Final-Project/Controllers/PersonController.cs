@@ -61,7 +61,7 @@ namespace DW_Final_Project.Controllers {
                     string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
 
                     // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
-                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
 
                     // Salvar o arquivo no servidor
                     using (var fileStream = new FileStream(filePath, FileMode.Create)) {
