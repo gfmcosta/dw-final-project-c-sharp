@@ -1,9 +1,122 @@
 ﻿
 
 <head>
-    <title>Test Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Splash Page</title>
 </head>
+
+<style>
+    html {
+        overflow-x: hidden;
+    }
+
+    .main-div {
+        align-items: center;
+        align-content: center;
+        margin-left: 80px;
+        margin-right: 80px;
+        margin-top: 2%;
+    }
+
+    .img-container {
+        overflow: hidden;
+        padding: 10px;
+        display: flex;
+        float: left;
+        width: 32%;
+        height: 85%;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+    }
+
+    .main-images {
+        height: inherit;
+        border-radius: 3%;
+        user-select: none;
+    }
+
+    .word {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        bottom: 20%;
+        width: 100%;
+        user-select: none;
+    }
+
+    .main-images:hover {
+        transform: scale(1.2);
+        transition: transform 0.8s;
+        cursor: pointer;
+    }
+
+    .word:hover {
+        cursor: pointer;
+    }
+
+    .mb-4 {
+        height: 200px;
+        display: flex;
+        margin: 0px auto;
+    }
+
+    .title {
+        color: rgb(0, 0, 0);
+        font: helvetica;
+        font-size: 30px;
+        font-weight: bold;
+        position: absolute;
+        transform: translate(-50%);
+        left: 50%;
+    }
+
+    .text-uppercase {
+        float: left;
+    }
+
+    #basic-navbar-nav {
+        position: absolute;
+        left: 50%;
+        top: 65%;
+        transform: translate(-50%, -5%);
+        margin: 0px auto;
+        float: left;
+    }
+
+    .container {
+        height: 100px;
+        width: 100vh;
+    }
+
+</style>
+
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is a test page.</p>
+    <div>
+        <br /><br /><br /><br />
+        <div class="main-div">
+            <div class="img-container" onclick="navigateTo('/produtos?season=1')">
+                <img alt='Imagem Primavera' src='https://wallpapers.com/images/hd/costa-rica-1000-x-1333-picture-wrksj1hivjprcj6d.jpg' class='main-images' width="100%">
+                <h2 class='word'>PRIMAVERA</h2>
+            </div>
+            <div class="img-container" onclick="navigateTo('/produtos?season=2')">
+                <img alt='Imagem Verão' src='https://images.unsplash.com/photo-1501426026826-31c667bdf23d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c3VtbWVyJTIwZnVufGVufDB8fDB8fA%3D%3D&w=1000&q=80' class='main-images' width="100%">
+                <h2 class='word'>VERÃO</h2>
+            </div>
+            <div class="img-container" onclick="navigateTo('/produtos?season=3')">
+                <img alt='Imagem Outono' src='https://cdn.wallpapersafari.com/18/83/xk9Y7W.jpg' class='main-images' width="100%">
+                <h2 class='word'>OUTONO</h2>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
+
+</html>
