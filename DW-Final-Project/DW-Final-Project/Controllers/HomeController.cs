@@ -13,9 +13,9 @@ namespace DW_Final_Project.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Splash()
+		public IActionResult login()
 		{
-            return View("~/Views/App/Splash.cshtml");
+            return View("~/Views/App/login.cshtml");
         }
 
 		public IActionResult Privacy()

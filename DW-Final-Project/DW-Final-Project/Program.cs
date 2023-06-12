@@ -47,7 +47,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
 	name: "default",
-	pattern: "{controller=Home}/{action=Splash}/{id?}");
+	pattern: "{controller=Home}/{action=login}/{id?}");
 app.MapRazorPages();
 
 app.UseCors();

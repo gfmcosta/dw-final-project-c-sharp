@@ -1,0 +1,91 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sessão</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<style>
+
+    form{
+        background-color: whitesmoke;
+        border-radius: 10px;
+        padding: 21px;
+        text-align: center;
+        width: 400px;
+    }
+
+    label{
+        font-size: 15px;
+    }
+
+    input{
+        width: 80%;
+        height: 25px;
+        border-radius: 5px;
+        border: 1px solid;
+    }
+
+    button{
+        width: 80%;
+        height: 25px;
+        border-radius: 5px;
+        border: 1px solid;
+    }
+
+    .main_div{
+        background-repeat: no-repeat;
+        background-size: 100%;
+        background-image: url("https://img.freepik.com/premium-vector/background-with-colorful-shopping-bags-vector-illustration-sale-discount-concept_653240-59.jpg");
+    }
+
+    .container{
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+    }
+
+    #margins-top{
+        margin-top: 35%;
+        width: 400px;
+        justify-content: center;
+        display: inline-grid;
+    }
+
+</style>
+
+<body>
+    <div class="main_div">
+        <div class="container">
+            <div class="row justify-content-center align-items-center" style="height: 100vh; background-color: transparent; margin-top: 3%;">
+                <div class="col-xs-12 col-md-12 bg-light rounded p-5" id="margins-top">
+                    <h1 class="text-center mb-5" style="text-align: center; font:">INICIAR SESSÃO</h1>
+                    <form>
+                        <div class="form-group">
+                            <label for="formBasicEmail">Email</label><br />
+                            <input class="form-control" type="email" placeholder="Insira o seu email"><br/>
+                            <small class="form-text text-muted">Não iremos partilhar o seu email com ninguém.</small>
+                        </div>
+                        <br><br />
+                        <div class="form-group">
+                            <label for="formBasicPassword">Password</label><br />
+                            <input class="form-control" type="password" placeholder="Insira a sua password">
+                        </div>
+                        <br><br />
+                        <button class="btn btn-primary w-100" type="button">Entrar</button>
+                        <br><br />
+                        <br>
+                        <button class="btn btn-secondary w-100" type="submit">Registar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
