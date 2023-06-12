@@ -80,11 +80,9 @@ namespace DW_Final_Project.Models
 		public string? imagePath { get; set; }
 		
 		/// <summary>
-		/// FK User
+		/// FK para userId para ASPNetUsers
 		/// </summary>
-		[ForeignKey(nameof(user))]
-		public int userFK { get; set; }
-		public User user { get; set; }
+		public string userId { get; set; }
 
 		/// <summary>
 		/// Lista de ordens/compras de um utilizador

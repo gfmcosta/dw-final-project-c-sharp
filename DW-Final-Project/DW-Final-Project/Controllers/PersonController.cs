@@ -18,7 +18,7 @@ namespace DW_Final_Project.Controllers {
 
         // GET: Person
         public async Task<IActionResult> Index() {
-            var applicationDbContext = _context.Person.Include(p => p.user);
+            var applicationDbContext = _context.Person;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -28,9 +28,7 @@ namespace DW_Final_Project.Controllers {
                 return NotFound();
             }
 
-            var person = await _context.Person
-                .Include(p => p.user)
-                .FirstOrDefaultAsync(m => m.id == id);
+            var person = await _context.Person.FirstOrDefaultAsync(m => m.id == id);
             if (person == null) {
                 return NotFound();
             }
@@ -38,54 +36,54 @@ namespace DW_Final_Project.Controllers {
             return View(person);
         }
 
-        // GET: Person/Create
-        public IActionResult Create() {
-            ViewData["userFK"] = new SelectList(_context.User, "id", "email");
-            return View();
-        }
+        //// GET: Person/Create
+        //public IActionResult Create() {
+        //    ViewData["userFK"] = new SelectList(_context.User, "id", "email");
+        //    return View();
+        //}
 
-        // POST: Person/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile) {
-            ModelState.Remove("user");
-            ModelState.Remove("imageFile");
-            ModelState.Remove("imagePath");
-            User user = await _context.User.FindAsync(person.userFK);
-            person.user = user;
-            if (ModelState.IsValid) {
-                if (imageFile != null && imageFile.Length > 0) {
-                    // Gerar um nome único para o arquivo
-                    string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+        //// POST: Person/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile) {
+        //    ModelState.Remove("user");
+        //    ModelState.Remove("imageFile");
+        //    ModelState.Remove("imagePath");
+        //    User user = await _context.User.FindAsync(person.userFK);
+        //    person.user = user;
+        //    if (ModelState.IsValid) {
+        //        if (imageFile != null && imageFile.Length > 0) {
+        //            // Gerar um nome único para o arquivo
+        //            string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
 
-                    // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
-                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+        //            // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
+        //                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
 
-                    // Salvar o arquivo no servidor
-                    using (var fileStream = new FileStream(filePath, FileMode.Create)) {
-                        await imageFile.CopyToAsync(fileStream);
-                    }
+        //            // Salvar o arquivo no servidor
+        //            using (var fileStream = new FileStream(filePath, FileMode.Create)) {
+        //                await imageFile.CopyToAsync(fileStream);
+        //            }
 
-                    // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
-                    person.imagePath = fileName;
-                } else {
-                    if (person.gender == "M") {
-                        person.imagePath = "default-m.png";
-                    } else {
-                        person.imagePath = "default-f.png";
-                    }
-                }
+        //            // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
+        //            person.imagePath = fileName;
+        //        } else {
+        //            if (person.gender == "M") {
+        //                person.imagePath = "default-m.png";
+        //            } else {
+        //                person.imagePath = "default-f.png";
+        //            }
+        //        }
 
-                _context.Add(person);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+        //        _context.Add(person);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-            ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
-            return View(person);
-        }
+        //    ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
+        //    return View(person);
+        //}
 
 
         // GET: Person/Edit/5
@@ -98,7 +96,6 @@ namespace DW_Final_Project.Controllers {
             if (person == null) {
                 return NotFound();
             }
-            ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
             return View(person);
         }
 
@@ -107,14 +104,13 @@ namespace DW_Final_Project.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath,userFK")] Person person, IFormFile imageFile) {
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath")] Person person, IFormFile imageFile) {
             if (id != person.id) {
                 return NotFound();
             }
             ModelState.Remove("user");
             ModelState.Remove("imageFile");
             ModelState.Remove("imagePath");
-            User user = await _context.User.FindAsync(person.userFK);
             Person existingPerson = await _context.Person.FindAsync(id);
 
             // Copiar as propriedades atualizadas para a entidade existente
@@ -125,8 +121,6 @@ namespace DW_Final_Project.Controllers {
             existingPerson.postalCode = person.postalCode;
             existingPerson.dataNasc = person.dataNasc;
             existingPerson.gender = person.gender;
-            existingPerson.userFK = person.userFK;
-            existingPerson.user = user;
 
             if (ModelState.IsValid) {
                 try {
@@ -160,7 +154,6 @@ namespace DW_Final_Project.Controllers {
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["userFK"] = new SelectList(_context.User, "id", "email", person.userFK);
             return View(person);
         }
 
@@ -171,7 +164,6 @@ namespace DW_Final_Project.Controllers {
             }
 
             var person = await _context.Person
-                .Include(p => p.user)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (person == null) {
                 return NotFound();
