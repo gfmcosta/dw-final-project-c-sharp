@@ -1,120 +1,50 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Your Application Title</title>
-    <link rel="stylesheet" href="your-stylesheet.css" />
-    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
-    <script src="your-script.js"></script>
-    @RenderSection("Styles", required: false)
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DW_Final_Project</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DW_Final_Project.styles.css" asp-append-version="true" />
 </head>
-
-<style>
-
-    .navbar-nav {
-        display: flex;
-        align-items: center;
-    }
-
-    .navbar-nav .nav-item {
-        margin-left: 10px;
-    }
-
-    .navbar-nav .nav-link {
-        padding: 10px;
-    }
-
-    .navbar-nav:last-child {
-        margin-left: auto;
-    }
-
-    .container{
-        display: flex;
-        justify-content: center;
-        width: 28%!important;
-        flex-wrap: wrap;
-
-    }
-
-    .collapse-navbar-collapse{
-        position: relative!important;
-        display: grid;
-        justify-content: center;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 15px;
-        height: fit-content;
-        flex: 1;
-        order: 2;
-    }
-
-    #navbar{
-        display: flex;
-        justify-content: center;
-        background-color: whitesmoke;
-    }
-
-    .titles{
-        margin-left: 100px;
-        margin-right: 100px;
-        margin-bottom: 10px!important;
-        position: relative!important;
-        font-size: 30px;
-        flex: 1;
-        order: 1;
-    }
-
-    .main-div{
-        margin-top: 0%!important;
-    }
-
-
-</style>
-
 <body>
     <header>
-        <!-- Your header content goes here -->
-        <!-- Start of the provided header HTML -->
-        <nav class="navbar bg-light" id="navbar" expand="lg" variant="light" fixed="top">
-            <div class="container">
-                <h1 class="titles">
-                    ÁGUA SALGADA
-                </h1>
-                <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basic-navbar-nav" aria-controls="basic-navbar-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DW_Final_Project</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>-->
-                <div class="collapse-navbar-collapse">
-              
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a href="/">Inicio</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-
                         <li class="nav-item">
-                            <a href="produtos">Produtos</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
-                        <li class="nav-item">
-                            <a href="about">Sobre</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="login">Iniciar Sessão</a>
-                        </li>
-                  
+                    </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
-        
-        <!-- End of the provided header HTML -->
     </header>
-
-    <div id="main-content">
-        @RenderBody()
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
     </div>
 
-    <footer>
-        <!-- Your footer content goes here -->
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - DW_Final_Project - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
     </footer>
-
-    @RenderSection("Scripts", required: false)
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
