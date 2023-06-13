@@ -82,7 +82,7 @@ namespace DW_Final_Project.Models
 		/// <summary>
 		/// FK para userId para ASPNetUsers
 		/// </summary>
-		public string userId { get; set; }
+		public string? userId { get; set; }
 
 		/// <summary>
 		/// Lista de ordens/compras de um utilizador
