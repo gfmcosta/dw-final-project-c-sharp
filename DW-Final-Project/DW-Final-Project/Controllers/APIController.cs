@@ -29,7 +29,6 @@ namespace DW_Final_Project.Controllers
         [HttpGet("/API/Login/{email}/{pwd}")]
         public async Task<IActionResult> Login(string email, string pwd)
         {
-            pwd = "123Qwe%23";
             string decodedPassword = HttpUtility.UrlDecode(pwd);
             if (email != null && pwd != null)
             {
