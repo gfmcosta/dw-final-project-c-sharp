@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "header.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SobrePage</title>
+  <link rel="stylesheet" href="SobrePage.css">
+</head>
+
+<style>
+    .images {
+        display: flex;
+        align-self: center;
+        border-radius: 20px;
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
+
+    h2 {
+        font: message-box;
+        font-size: 30px;
+    }
+
+    .left {
+        text-align: left;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .main {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        justify-content: center;
+        align-content: center;
+    }
+</style>
+
+<body>
+  <div class="main" style="width: 45%; height: fit-content; margin-top: 300px;">
+    <div
+      style="display: grid; justify-content: center; grid-template-columns: 400px 400px; grid-template-rows: 500px; gap: 20px 100px; width: 100%;">
+      <div class="images" style="grid-row: 1; grid-column: 1;">
+        <img src="https://media.discordapp.net/attachments/1021769556584300604/1117538328129065030/Screenshot_2023-05-17_151733.png?width=602&amp;height=671"
+          alt="Product" class="img-fluid" style="scale: 1.15; height: 100%; object-fit: contain;">
+      </div>
+      <div class="images" style="grid-row: 1; grid-column: 2; width: 100%;">
+        <img src="https://media.discordapp.net/attachments/1021769556584300604/1117539016821198878/887736d8-be23-492b-a84d-476454e80405.JPG?width=573&amp;height=671"
+          alt="Product" class="img-fluid" style="scale: 1.15; height: 100%; width: 100%; object-fit: contain;">
+      </div>
+      <div class="left">
+        <h2>JOÃO GONÇALVES</h2>
+      </div>
+      <div class="right">
+        <h2>GONÇALO COSTA</h2>
+      </div>
+      <div class="left">
+        <p>aluno23882@ipt.pt</p>
+      </div>
+      <div class="right">
+        <p>aluno23692@ipt.pt</p>
+      </div>
+      <div class="left">
+        <p>Computer Science and Engineering student aiming for a Cybersecurity career</p>
+      </div>
+      <div class="right">
+        <p>Junior Software Engineer | Full Stack Developer | Ambassador at Magma Studio</p>
+      </div>
+    </div><br><br>
+    <div style="width: 100%; text-align: justify;">
+      <p>Este projeto visa a criação de duas aplicações Web | Uma aplicação web que permita aceder e manipular informação presente numa base de dados através de Web Services “Front-End e Web Services” | Uma aplicação web, em ambiente server side, onde os seus utilizadores acedam a informação diferenciada em função das suas características e permissões “programação lado servidor” |Loja online de Roupa 'Água Salgada' | Da autoria de Gonçalo Costa 23692 & João Gonçalves 23882</p>
+      <br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+  </div>
+</body>
+
+</html>
