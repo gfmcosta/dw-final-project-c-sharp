@@ -94,20 +94,13 @@ namespace DW_Final_Project.Controllers
 
             if (products == null)
             {
-                return Ok();
+                return NotFound();
             }
 
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
-
-            var serializedUser = JsonSerializer.Serialize(products, options);
-
-            return Ok(serializedUser);
+            return Ok(products);
         }
 
-        //GET: Get All Products
+        //GET: Get All Categories
         [HttpGet("/API/Category")]
         public async Task<IActionResult> Category()
         {
@@ -115,13 +108,70 @@ namespace DW_Final_Project.Controllers
 
             if (categories == null)
             {
-                return Ok();
+                return NotFound();
             }
 
             return Ok(categories);
         }
 
-        //GET: Get All Products
+        //GET: Get All Orders
+        [HttpGet("/API/Order")]
+        public async Task<IActionResult> Order()
+        {
+            var orders = await _context.Order.ToListAsync();
+
+            if (orders == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orders);
+        }
+
+        //GET: Get All Order Items
+        [HttpGet("/API/OrderItems")]
+        public async Task<IActionResult> OrderItem()
+        {
+            var orderItems = await _context.OrderItem.ToListAsync();
+
+            if (orderItems == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orderItems);
+        }
+
+        //GET: Get All Person
+        [HttpGet("/API/Person")]
+        public async Task<IActionResult> Person()
+        {
+            var p = await _context.Person.ToListAsync();
+
+            if (p == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(p);
+        }
+
+
+        //GET: Get All Product Season
+        [HttpGet("/API/ProductSeason")]
+        public async Task<IActionResult> ProductSeason()
+        {
+            var ps = await _context.Product_Season.ToListAsync();
+
+            if (ps == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(ps);
+        }
+
+        //GET: Get Product by id
         [HttpGet("/API/Products/{id}")]
         public async Task<IActionResult> getProductById(int id)
         {
