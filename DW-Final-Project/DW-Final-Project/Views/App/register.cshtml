@@ -1,5 +1,155 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    Layout = "header.cshtml";
 }
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegistrationPage</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-pzjw8f+ua3jwSA/AxNtxF7g5MLZBExn6fC5q9vAU1QwoEVsfc6kLkqc4sVbqFv7n"
+          crossorigin="anonymous">
+    <style>
+        .registration-page-container {
+            min-height: 100vh;
+            min-width: 100%;
+            background-image: url('https://img.freepik.com/premium-vector/background-with-colorful-shopping-bags-vector-illustration-sale-discount-concept_653240-59.jpg');
+            background-repeat: repeat;
+            background-size: 100%;
+        }
+
+        .registration-form {
+            background-color: whitesmoke;
+            border-radius: 10px;
+            padding: 21px;
+            text-align: center;
+            width: 600px;
+            margin-top: 5%;
+            display: grid;
+            justify-content: center;
+        }
+
+        form {
+            background-color: whitesmoke;
+            border-radius: 10px;
+            padding: 21px;
+            text-align: center;
+            width: 400px;
+        }
+
+        label {
+            font-size: 15px;
+        }
+
+        input {
+            width: 80%;
+            height: 25px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+
+        button {
+            height: 25px;
+            border-radius: 5px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="registration-page-container">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6" style="margin-top: 5%; display: grid; justify-content: center;">
+                    <form class="registration-form" style="left:50%; transform:translate(-50%); position:absolute;">
+                        <h1 class="text-center">Criar Conta</h1>
+                        <div class="form-group">
+                            <label for="formName">Nome</label><br />
+                            <input type="text"
+                                   class="form-control"
+                                   id="formName"
+                                   placeholder="Insira o seu nome">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formEmail">Email</label><br />
+                            <input type="email"
+                                   class="form-control"
+                                   id="formEmail"
+                                   placeholder="Insira o seu email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formPassword">Senha</label><br />
+                            <input type="password"
+                                   class="form-control"
+                                   id="formPassword"
+                                   placeholder="Insira a sua password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formPhoneNumber">Telemóvel</label><br />
+                            <input type="text"
+                                   class="form-control"
+                                   id="formPhoneNumber"
+                                   placeholder="Insira o seu telemóvel">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formAddress">Morada</label><br />
+                            <input type="text"
+                                   class="form-control"
+                                   id="formAddress"
+                                   placeholder="Insira a sua morada">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formPostalCode">Código Postal</label><br />
+                            <input type="text"
+                                   class="form-control"
+                                   id="formPostalCode"
+                                   placeholder="Insira o seu código postal">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formImage">Imagem</label><br />
+                            <input type="file"
+                                   class="form-control-file"
+                                   id="formImage">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formGender">Género</label>
+                            <div class="form-check">
+                                <input type="radio"
+                                       class="form-check-input"
+                                       id="genderMasculino"
+                                       name="gender"
+                                       value="Masculino">
+                                <label class="form-check-label" for="genderMasculino">Masculino</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio"
+                                       class="form-check-input"
+                                       id="genderFeminino"
+                                       name="gender"
+                                       value="Feminino">
+                                <label class="form-check-label" for="genderFeminino">Feminino</label>
+                            </div>
+                        </div>
+
+                        <br>
+                        <button type="button" class="btn btn-primary btn-block">Registrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

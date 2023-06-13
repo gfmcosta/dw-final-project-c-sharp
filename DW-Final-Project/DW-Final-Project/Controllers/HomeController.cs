@@ -15,7 +15,7 @@ namespace DW_Final_Project.Controllers
 
 		public IActionResult produtos()
 		{
-            return View("~/Views/App/sobre.cshtml");
+            return View("~/Views/App/login.cshtml");
         }
 
 		public IActionResult Privacy()
