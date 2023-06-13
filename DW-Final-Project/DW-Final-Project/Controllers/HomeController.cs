@@ -13,9 +13,9 @@ namespace DW_Final_Project.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public IActionResult produtos()
 		{
-            return View();
+            return View("~/Views/App/produtos.cshtml");
         }
 
 		public IActionResult Privacy()

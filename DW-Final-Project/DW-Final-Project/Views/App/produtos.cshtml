@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "header.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <link rel="stylesheet" href="ProdutosPage.css">
+</head>
+
+<body>
+    <div class="container">
+        <select class="my-4" style="margin-top: 5% !important;">
+            <option value="">Todas as Épocas</option>
+            <option value="2">Verão</option>
+            <option value="1">Primavera</option>
+            <option value="3">Outono</option>
+        </select>
+    </div>
+    <div style="display: grid; justify-content: center; grid-template-columns: 0.25fr 0.25fr 0.25fr 0.25fr;
+      grid-template-rows: repeat(auto, 2fr); gap: 20px 20px; margin-bottom: 30%;">
+        <div class="h-100" style="width: 60%; left:50%; transform: translate(-50%); position: absolute;">
+            <a href="/product?id=1">
+                <img src="https://static.bershka.net/4/photos2/2023/V/0/1/p/0496/538/505/173d444fbaa583a28d1b832b4edc0e0c-0496538505_2_3_0.jpg?imwidth=850&amp;impolicy=bershka-itxmedium&amp;imformat=generic"
+                     class="card-image" style="max-width: 20%; height: auto; object-fit: cover; align-self: center;">
+            </a>
+            <div class="d-flex flex-column justify-content-between" style="text-align: left;">
+                <div>
+                    <h5 class="card-title" style="font: message-box; cursor: pointer;">Product 1</h5>
+                    <p class="card-description">Description of Product 1</p>
+                    <p class="card-price">10€</p>
+                </div>
+                <button class="align-self-center" style="display: none;">Comprar</button>
+            </div>
+        </div>
+        <!-- Repeat the above structure for other products -->
+    </div>
+</body>
+</html>

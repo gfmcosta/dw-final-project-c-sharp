@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Your Application Title</title>
+    <link rel="stylesheet" href="your-stylesheet.css" />
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script src="your-script.js"></script>
+    @RenderSection("Styles", required: false)
+</head>
+
+<style>
+
+    .navbar-nav {
+        display: flex;
+        align-items: center;
+    }
+
+        .navbar-nav .nav-item {
+            margin-left: 10px;
+        }
+
+        .navbar-nav .nav-link {
+            padding: 10px;
+        }
+
+        .navbar-nav:last-child {
+            margin-left: auto;
+        }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        width: 28% !important;
+        flex-wrap: wrap;
+    }
+
+    .collapse-navbar-collapse {
+        position: relative !important;
+        display: grid;
+        justify-content: center;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 15px;
+        height: fit-content;
+        flex: 1;
+        order: 2;
+    }
+
+    #navbar {
+        display: flex;
+        justify-content: center;
+        background-color: whitesmoke;
+    }
+
+    .titles {
+        margin-left: 100px;
+        margin-right: 100px;
+        margin-bottom: 10px !important;
+        position: relative !important;
+        font-size: 30px;
+        flex: 1;
+        order: 1;
+    }
+
+    .main-div {
+        margin-top: 0% !important;
+    }
+
+</style>
+
+<body>
+    <header>
+        <!-- Your header content goes here -->
+        <!-- Start of the provided header HTML -->
+        <nav class="navbar bg-light" id="navbar" expand="lg" variant="light" fixed="top">
+            <div class="container">
+                <h1 class="titles">
+                    ÁGUA SALGADA
+                </h1>
+                <!--<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basic-navbar-nav" aria-controls="basic-navbar-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>-->
+                <div class="collapse-navbar-collapse">
+
+                    <li class="nav-item">
+                        <a href="/">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="produtos">Produtos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="about">Sobre</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="login">Iniciar Sessão</a>
+                    </li>
+
+                </div>
+            </div>
+        </nav>
+
+        <!-- End of the provided header HTML -->
+    </header>
+
+    <div id="main-content">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <!-- Your footer content goes here -->
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
