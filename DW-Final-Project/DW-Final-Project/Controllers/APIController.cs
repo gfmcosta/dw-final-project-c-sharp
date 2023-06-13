@@ -1,5 +1,6 @@
 ﻿using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
@@ -7,45 +8,56 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Web;
 
 namespace DW_Final_Project.Controllers
 {
     public class APIController : Controller
     {
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public APIController(ApplicationDbContext context)
+        public APIController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
+            _signInManager = signInManager;
             _context = context;
+            _userManager = userManager;
         }
 
-        ////GET: User Login
-        //[HttpGet("/API/Login/{email}/{pwd}")]
-        //public async Task<IActionResult> Login(string email, string pwd)
-        //{
-        //    if (email == null || pwd == null || email == "" || pwd == "" || _context.User == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    pwd = EncriptarSenha(pwd);
-        //    var user = await _context.User
-        //        .Include(u => u.type)
-        //        .FirstOrDefaultAsync(m => m.email.Equals(email) && m.password.Equals(pwd));
+        // GET: User Login
+        [HttpGet("/API/Login/{email}/{pwd}")]
+        public async Task<IActionResult> Login(string email, string pwd)
+        {
+            pwd = "123Qwe%23";
+            string decodedPassword = HttpUtility.UrlDecode(pwd);
+            if (email != null && pwd != null)
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user != null)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user.Email, decodedPassword, false, lockoutOnFailure: false);
+                    if (result.Succeeded)
+                    {
+                        var person = await _context.Person.FirstOrDefaultAsync(p => p.userId == user.Id);
+                        if (person != null)
+                        {
+                            var userWithPerson = new
+                            {
+                                email= email,
+                                person = person
+                            };
+                            return Ok(userWithPerson);
+                        }
+                    }
+                }
 
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
+                return NotFound();
+            }
 
-        //    var options = new JsonSerializerOptions
-        //    {
-        //        ReferenceHandler = ReferenceHandler.Preserve
-        //    };
+            return BadRequest();
+        }
 
-        //    var serializedUser = JsonSerializer.Serialize(user, options);
-
-        //    return Ok(serializedUser);
-        //}
 
         ////POST: User Register
         //[HttpPost("/API/Register")]
@@ -97,6 +109,20 @@ namespace DW_Final_Project.Controllers
         }
 
         //GET: Get All Products
+        [HttpGet("/API/Category")]
+        public async Task<IActionResult> Category()
+        {
+            var categories = await _context.Category.ToListAsync();
+
+            if (categories == null)
+            {
+                return Ok();
+            }
+
+            return Ok(categories);
+        }
+
+        //GET: Get All Products
         [HttpGet("/API/Products/{id}")]
         public async Task<IActionResult> getProductById(int id)
         {
@@ -117,107 +143,77 @@ namespace DW_Final_Project.Controllers
             return Ok(serializedUser);
         }
 
-        ////GET: Get Profile
-        //[HttpGet("/API/Profile/{email}")]
-        //public async Task<IActionResult> Profile(string email)
-        //{
-        //    if (email == null)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var person = await _context.Person
-        //        .Include(u => u.user)
-        //        .FirstOrDefaultAsync(m => m.user.email==email);
-
-        //    if (person == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var options = new JsonSerializerOptions
-        //    {
-        //        ReferenceHandler = ReferenceHandler.Preserve
-        //    };
-
-        //    var serializedUser = JsonSerializer.Serialize(person, options);
-
-        //    return Ok(serializedUser);
-        //}
-
-        ////POST: User Register
-        //[HttpPost("/API/updateProfile/{email}")]
-        //public IActionResult UpdatePerson(string email, [FromBody] Person personUpdateModel)
-        //{
-        //    // Lógica para atualizar os dados da pessoa com o email fornecido
-
-        //    // Exemplo de implementação básica para atualizar os dados da pessoa
-        //    var user = _context.User.FirstOrDefault(u => u.email == email);
-        //    var person = _context.Person.FirstOrDefault(p => p.userFK == user.id);
-
-        //    if (person != null)
-        //    {
-        //        person.name = personUpdateModel.name;
-        //        person.phoneNumber = personUpdateModel.phoneNumber;
-        //        person.address = personUpdateModel.address;
-        //        person.postalCode= personUpdateModel.postalCode;
-        //        person.dataNasc = personUpdateModel.dataNasc;
-        //        person.gender = personUpdateModel.gender;
-
-        //        if (personUpdateModel.imagePath.StartsWith("data:image/"))
-        //        {
-        //            int startIndex = personUpdateModel.imagePath.IndexOf("/") + 1; // Encontra a posição do primeiro caractere após "/"
-        //            int endIndex = personUpdateModel.imagePath.IndexOf(";"); // Encontra a posição do último caractere antes de ";"
-        //            string extFoto = personUpdateModel.imagePath.Substring(startIndex, endIndex - startIndex);
-
-        //            // Remova o prefixo "data:image/jpeg;base64," da string
-        //            string base64String = personUpdateModel.imagePath.Substring(personUpdateModel.imagePath.IndexOf(',') + 1);
-
-        //            // Decodifique a string base64 em um array de bytes
-        //            byte[] imagemBytes = Convert.FromBase64String(base64String);
-        //            //converter byte[] para ficheiro
-        //            string nomeArquivo = Guid.NewGuid().ToString() + "_" + person.id+"."+extFoto;
-        //            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", nomeArquivo);
-
-        //            using (FileStream fs = new FileStream(filePath, FileMode.Create))
-        //            {
-        //                fs.Write(imagemBytes, 0, imagemBytes.Length);
-        //            }
-        //            person.imagePath = nomeArquivo;
-        //        }
-        //        else
-        //        {
-        //            //mesma imagem
-        //            person.imagePath = personUpdateModel.imagePath;
-        //        }
-
-        //        _context.Update(person);
-        //        _context.SaveChanges();
-
-        //        return Ok("Dados da pessoa atualizados com sucesso.");
-        //    }
-
-        //    return NotFound("Pessoa não encontrada.");
-        //}
-
-
-        private string EncriptarSenha(string senha)
+        //GET: Get Profile
+        [HttpGet("/API/Profile/{id}")]
+        public async Task<IActionResult> Profile(int id)
         {
-            using (SHA256 sha256 = SHA256.Create())
+            if (id == null || id==0)
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(senha);
-                byte[] hash = sha256.ComputeHash(bytes);
-
-                StringBuilder builder = new StringBuilder();
-
-                for (int i = 0; i < hash.Length; i++)
-                {
-                    builder.Append(hash[i].ToString("x2")); // Converte o byte em uma string hexadecimal
-                }
-
-                return builder.ToString();
+                return BadRequest();
             }
+            var person = await _context.Person.FindAsync(id);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(person);
         }
 
+        //POST: Profile Updates
+        [HttpPost("/API/updateProfile/{id}")]
+        public IActionResult UpdatePerson(int id, [FromBody] Person personUpdateModel)
+        {
+            // Lógica para atualizar os dados da pessoa com o email fornecido
+
+            // Exemplo de implementação básica para atualizar os dados da pessoa
+            var person = _context.Person.FirstOrDefault(p => p.id == id);
+
+            if (person != null)
+            {
+                person.name = personUpdateModel.name;
+                person.phoneNumber = personUpdateModel.phoneNumber;
+                person.address = personUpdateModel.address;
+                person.postalCode = personUpdateModel.postalCode;
+                person.dataNasc = personUpdateModel.dataNasc;
+                person.gender = personUpdateModel.gender;
+
+                if (personUpdateModel.imagePath.StartsWith("data:image/"))
+                {
+                    int startIndex = personUpdateModel.imagePath.IndexOf("/") + 1; // Encontra a posição do primeiro caractere após "/"
+                    int endIndex = personUpdateModel.imagePath.IndexOf(";"); // Encontra a posição do último caractere antes de ";"
+                    string extFoto = personUpdateModel.imagePath.Substring(startIndex, endIndex - startIndex);
+
+                    // Remova o prefixo "data:image/jpeg;base64," da string
+                    string base64String = personUpdateModel.imagePath.Substring(personUpdateModel.imagePath.IndexOf(',') + 1);
+
+                    // Decodifique a string base64 em um array de bytes
+                    byte[] imagemBytes = Convert.FromBase64String(base64String);
+                    //converter byte[] para ficheiro
+                    string nomeArquivo = Guid.NewGuid().ToString() + "_" + person.id + "." + extFoto;
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", nomeArquivo);
+
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                    {
+                        fs.Write(imagemBytes, 0, imagemBytes.Length);
+                    }
+                    person.imagePath = nomeArquivo;
+                }
+                else
+                {
+                    //mesma imagem
+                    person.imagePath = personUpdateModel.imagePath;
+                }
+
+                _context.Update(person);
+                _context.SaveChanges();
+
+                return Ok("Dados da pessoa atualizados com sucesso.");
+            }
+
+            return NotFound("Pessoa não encontrada.");
+        }
 
     }
 }
