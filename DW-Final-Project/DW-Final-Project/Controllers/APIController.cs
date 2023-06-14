@@ -153,14 +153,7 @@ namespace DW_Final_Project.Controllers
                 return Ok();
             }
 
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve
-            };
-
-            var serializedUser = JsonSerializer.Serialize(product, options);
-
-            return Ok(serializedUser);
+            return Ok(product);
         }
 
         //GET: Get Profile
@@ -262,6 +255,9 @@ namespace DW_Final_Project.Controllers
                 };
 
                 _context.OrderItem.Add(orderItem);
+                _context.SaveChanges();
+                order.price += orderItem.totalPrice;
+                _context.Order.Update(order);
                 _context.SaveChanges();
             }
 
