@@ -236,10 +236,9 @@ namespace DW_Final_Project.Controllers
         }
 
         // POST: Create Order with OrderItems
-        [HttpPost("/API/orders/person")]
+        [HttpGet("/API/orders/{person}")]
         public IActionResult CreateOrder([FromBody] Order orderCreationModel)
         {
-            // Create a new Order object
             var order = new Order
             {
                 price = orderCreationModel.price,
@@ -247,18 +246,24 @@ namespace DW_Final_Project.Controllers
                 personFK = orderCreationModel.personFK
             };
 
-            // Add the order to the context
             _context.Order.Add(order);
             _context.SaveChanges();
 
-            // Create OrderItems and associate them with the Order
-            foreach (var orderItemModel in orderCreationModel.OrderItems)
+            return Ok("Order created successfully.");
+        }
+
+
+        // POST: Create OrderItems
+        [HttpPost("/API/orders/items")]
+        public IActionResult CreateOrderItems([FromBody] List<OrderItem> orderItemList)
+        {
+            foreach (var orderItemModel in orderItemList)
             {
                 var orderItem = new OrderItem
                 {
                     quantity = orderItemModel.Quantity,
                     totalPrice = orderItemModel.TotalPrice,
-                    orderFK = order.id,
+                    orderFK = orderItemModel.OrderId,
                     productFK = orderItemModel.ProductId,
                     size = orderItemModel.Size
                 };
@@ -268,8 +273,9 @@ namespace DW_Final_Project.Controllers
 
             _context.SaveChanges();
 
-            return Ok("Order created successfully.");
+            return Ok("Order items created successfully.");
         }
+
 
 
     }
