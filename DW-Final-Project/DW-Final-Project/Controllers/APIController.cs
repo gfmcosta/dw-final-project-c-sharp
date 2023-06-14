@@ -57,35 +57,6 @@ namespace DW_Final_Project.Controllers
             return BadRequest();
         }
 
-
-        ////POST: User Register
-        //[HttpPost("/API/Register")]
-        //public async Task<IActionResult> Register(string email, string pwd)
-        //{
-        //    if (email == null || pwd == null || email == "" || pwd == "" || _context.User == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var user = await _context.User
-        //        .Include(u => u.type)
-        //        .FirstOrDefaultAsync(m => m.email.Equals(email) && m.password.Equals(pwd));
-
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var options = new JsonSerializerOptions
-        //    {
-        //        ReferenceHandler = ReferenceHandler.Preserve
-        //    };
-
-        //    var serializedUser = JsonSerializer.Serialize(user, options);
-
-        //    return Ok(serializedUser);
-        //}
-
         //GET: Get All Products
         [HttpGet("/API/Products")]
         public async Task<IActionResult> Products()
@@ -263,6 +234,43 @@ namespace DW_Final_Project.Controllers
 
             return NotFound("Pessoa não encontrada.");
         }
+
+        // POST: Create Order with OrderItems
+        [HttpPost("/API/orders/person")]
+        public IActionResult CreateOrder([FromBody] Order orderCreationModel)
+        {
+            // Create a new Order object
+            var order = new Order
+            {
+                price = orderCreationModel.price,
+                IVA = orderCreationModel.IVA,
+                personFK = orderCreationModel.personFK
+            };
+
+            // Add the order to the context
+            _context.Order.Add(order);
+            _context.SaveChanges();
+
+            // Create OrderItems and associate them with the Order
+            foreach (var orderItemModel in orderCreationModel.OrderItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    quantity = orderItemModel.Quantity,
+                    totalPrice = orderItemModel.TotalPrice,
+                    orderFK = order.id,
+                    productFK = orderItemModel.ProductId,
+                    size = orderItemModel.Size
+                };
+
+                _context.OrderItem.Add(orderItem);
+            }
+
+            _context.SaveChanges();
+
+            return Ok("Order created successfully.");
+        }
+
 
     }
 }
