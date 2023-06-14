@@ -235,43 +235,35 @@ namespace DW_Final_Project.Controllers
             return NotFound("Pessoa não encontrada.");
         }
 
-        // POST: Create Order with OrderItems
-        [HttpGet("/API/orders/{person}")]
-        public IActionResult CreateOrder([FromBody] Order orderCreationModel)
+
+        // POST: Create OrderItems
+        [HttpPost("/API/orders/{id}")]
+        public IActionResult CreateOrderItems(int id, [FromBody] List<OrderItem> orderItemList)
         {
             var order = new Order
             {
-                price = orderCreationModel.price,
-                IVA = orderCreationModel.IVA,
-                personFK = orderCreationModel.personFK
+                price = 0,
+                IVA = 23,
+                personFK = id
             };
 
             _context.Order.Add(order);
             _context.SaveChanges();
 
-            return Ok("Order created successfully.");
-        }
-
-
-        // POST: Create OrderItems
-        [HttpPost("/API/orders/items")]
-        public IActionResult CreateOrderItems([FromBody] List<OrderItem> orderItemList)
-        {
             foreach (var orderItemModel in orderItemList)
             {
                 var orderItem = new OrderItem
                 {
-                    quantity = orderItemModel.Quantity,
-                    totalPrice = orderItemModel.TotalPrice,
-                    orderFK = orderItemModel.OrderId,
-                    productFK = orderItemModel.ProductId,
-                    size = orderItemModel.Size
+                    quantity = orderItemModel.quantity,
+                    totalPrice = orderItemModel.totalPrice,
+                    orderFK = order.id,
+                    productFK = orderItemModel.productFK,
+                    size = orderItemModel.size
                 };
 
                 _context.OrderItem.Add(orderItem);
+                _context.SaveChanges();
             }
-
-            _context.SaveChanges();
 
             return Ok("Order items created successfully.");
         }
