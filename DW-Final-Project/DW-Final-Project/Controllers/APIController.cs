@@ -1,11 +1,19 @@
-﻿using DW_Final_Project.Data;
+﻿using DW_Final_Project.Areas.Identity.Pages.Account;
+using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
+using System;
+using System.Net.WebSockets;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -15,14 +23,27 @@ namespace DW_Final_Project.Controllers
     public class APIController : Controller
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly ILogger<RegisterModel> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
-        public APIController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public APIController(UserManager<IdentityUser> userManager,
+            IUserStore<IdentityUser> userStore,
+            SignInManager<IdentityUser> signInManager,
+            ILogger<RegisterModel> logger,
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
-            _signInManager = signInManager;
-            _context = context;
             _userManager = userManager;
+            _userStore = userStore;
+            _emailStore = GetEmailStore();
+            _signInManager = signInManager;
+            _logger = logger;
+            _emailSender = emailSender;
+            _context = context;
         }
 
         // GET: User Login
@@ -265,6 +286,175 @@ namespace DW_Final_Project.Controllers
         }
 
 
+        // POST: Create Category
+        [HttpPost("/API/category/create")]
+        public IActionResult CreateCategory([FromBody] Category category)
+        {
+            try
+            {
+            _context.Category.Add(category);
+            _context.SaveChanges();
+            return Ok("Category created successfully.");
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message); 
+            }
+        }
+
+        // POST: Create SeasonProduct
+        [HttpPost("/API/seasonproduct/create")]
+        public IActionResult CreateSeasonProduct([FromBody] Product_Season ps)
+        {
+            try
+            {
+                _context.Product_Season.Add(ps);
+                _context.SaveChanges();
+                return Ok("Product_Season created successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // POST: Create OrderItems
+        [HttpPost("/API/product/create")]
+        public IActionResult CreateProduct([FromBody] Product product)
+        {
+            try
+            {
+                product.price =
+                   Convert.ToDecimal(product.priceAux
+                                            .Replace('.', ','));
+                if (product.imagePath.StartsWith("data:image/"))
+                {
+                    int startIndex = product.imagePath.IndexOf("/") + 1; // Encontra a posição do primeiro caractere após "/"
+                    int endIndex = product.imagePath.IndexOf(";"); // Encontra a posição do último caractere antes de ";"
+                    string extFoto = product.imagePath.Substring(startIndex, endIndex - startIndex);
+
+                    // Remova o prefixo "data:image/jpeg;base64," da string
+                    string base64String = product.imagePath.Substring(product.imagePath.IndexOf(',') + 1);
+
+                    // Decodifique a string base64 em um array de bytes
+                    byte[] imagemBytes = Convert.FromBase64String(base64String);
+                    //converter byte[] para ficheiro
+                    string nomeArquivo = Guid.NewGuid().ToString() + "_" + product.id + "." + extFoto;
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", nomeArquivo);
+
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                    {
+                        fs.Write(imagemBytes, 0, imagemBytes.Length);
+                    }
+                    product.imagePath = nomeArquivo;
+                }
+                else
+                {
+                    //mesma imagem
+                    product.imagePath = product.imagePath;
+                }
+                _context.Product.Add(product);
+                _context.SaveChanges();
+                return Ok("Product created successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // POST: Create OrderItems
+        [HttpPost("/API/Register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserDTO userDTO)
+        {
+                var user = CreateUser();
+
+                await _userStore.SetUserNameAsync(user, userDTO.email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(user, userDTO.email, CancellationToken.None);
+                var result = await _userManager.CreateAsync(user, userDTO.password);
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User created a new account with password.");
+                Person p = new Person();
+                p.userId = user.Id;
+                p.dataNasc = userDTO.dataNasc;
+                p.name = userDTO.name;
+                p.address = userDTO.address;
+                p.gender = userDTO.gender;
+                p.phoneNumber = userDTO.phoneNumber;
+                p.postalCode = userDTO.postalCode;
+               
+                try
+                {
+                    if (userDTO.imagePath!=null && userDTO.imagePath.StartsWith("data:image/"))
+                    {
+                        int startIndex = userDTO.imagePath.IndexOf("/") + 1; // Encontra a posição do primeiro caractere após "/"
+                        int endIndex = userDTO.imagePath.IndexOf(";"); // Encontra a posição do último caractere antes de ";"
+                        string extFoto = userDTO.imagePath.Substring(startIndex, endIndex - startIndex);
+
+                        // Remova o prefixo "data:image/jpeg;base64," da string
+                        string base64String = userDTO.imagePath.Substring(userDTO.imagePath.IndexOf(',') + 1);
+
+                        // Decodifique a string base64 em um array de bytes
+                        byte[] imagemBytes = Convert.FromBase64String(base64String);
+                        //converter byte[] para ficheiro
+                        string nomeArquivo = Guid.NewGuid().ToString() + "_" + p.userId + "." + extFoto;
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", nomeArquivo);
+
+                        using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                        {
+                            fs.Write(imagemBytes, 0, imagemBytes.Length);
+                        }
+                        p.imagePath = nomeArquivo;
+                    }
+                    else
+                    {
+                        if (p.gender == "M")
+                        {
+                            p.imagePath = "default-m.png";
+                        }
+                        else
+                        {
+                            p.imagePath = "default-f.png";
+                        }
+                    }
+                    _context.Person.Add(p);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    _logger.LogError("Erro ao criar user");
+                    throw;
+                }
+                var userId = await _userManager.GetUserIdAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                return Ok("Register created successfully.");
+            }
+            return BadRequest();
+        }
+        private IdentityUser CreateUser()
+        {
+            try
+            {
+                return Activator.CreateInstance<IdentityUser>();
+            }
+            catch
+            {
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+            }
+        }
+
+        private IUserEmailStore<IdentityUser> GetEmailStore()
+        {
+            if (!_userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException("The default UI requires a user store with email support.");
+            }
+            return (IUserEmailStore<IdentityUser>)_userStore;
+        }
 
     }
 }
