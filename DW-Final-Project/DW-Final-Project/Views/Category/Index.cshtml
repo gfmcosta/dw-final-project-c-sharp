@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<DW_Final_Project.Models.Category>
 
-@{
-    ViewData["Title"] = "Index";
-}
 
 <h1>Index</h1>
 
@@ -25,9 +22,9 @@
                 @Html.DisplayFor(modelItem => item.description)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                <a asp-controller="Category" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-controller="Category" asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.id">Delete</a>
             </td>
         </tr>
 }

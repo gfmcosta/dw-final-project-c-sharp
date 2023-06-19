@@ -31,7 +31,7 @@
     .container {
         display: flex;
         justify-content: center;
-        width: 29% !important;
+        width: 28% !important;
         flex-wrap: wrap;
     }
 
@@ -39,7 +39,7 @@
         position: relative !important;
         display: grid;
         justify-content: center;
-        grid-template-columns: 2fr 2fr 2fr 3fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
         column-gap: 15px;
         height: fit-content;
         flex: 1;
@@ -66,28 +66,10 @@
         margin-top: 0% !important;
     }
 
-    .cartPopup {
-        display: none;
-        position: fixed;
-        left: 50%;
-        transform: translate(-50%);
-        width: 500px;
-        height: 400px;
-        background-color: #fefefefe;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    #cartCheckbox:checked ~ .cartPopup {
-        display: block;
-    }
-
-
 </style>
 
 <body>
-    <header style="text-align: center;">
+    <header>
         <!-- Your header content goes here -->
         <!-- Start of the provided header HTML -->
         <nav class="navbar bg-light" id="navbar" expand="lg" variant="light" fixed="top">
@@ -101,59 +83,32 @@
                 <div class="collapse-navbar-collapse">
 
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Index">Inicio</a>
+                        <a asp-controller="Admin" asp-action="Categorias">Categorias</a>
                     </li>
 
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Produtos">Produtos</a>
+                        <a asp-controller="Admin" asp-action="Pedidos">Pedidos</a>
                     </li>
 
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Sobre">Sobre</a>
+                        <a asp-controller="Admin" asp-action="Artigos">Artigos</a>
                     </li>
 
                     <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Login">Iniciar Sessão</a>
+                        <a asp-controller="Admin" asp-action="Pessoas">Pessoas</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="Produtos">Produtos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Admin" asp-action="Epocas">Épocas</a>
                     </li>
 
                 </div>
             </div>
         </nav>
-        
-        <input type="checkbox" id="cartCheckbox" >
-        <label for="cartCheckbox" >Ver Carrinho</label>
-
-        <div class="cartPopup">
-            <div id="cartModal">
-                <div>
-                    <div>
-                        <div>
-                            <h5 class="modal-title">Carrinho de Compras</h5>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div>
-                            <h4>Lista de produtos</h4>
-                            <strong>
-                                <p>
-                                    <span style="display: inline-block; width: 60px; margin-left: 10%;">Nº</span>
-                                    <span style="display: inline-block; width: 100px;">Nome</span>
-                                    <span style="display: inline-block; width: 80px;">Tamanho</span>
-                                    <span style="display: inline-block; width: 100px;">Quantidade</span>
-                                    <span style="display: inline-block; width: 80px;">Preço</span>
-                                </p>
-                            </strong>
-                        </div>
-                        <div>
-                            <span style="margin-right: auto; font-weight: bold; font-size: 20px;">Preço Total: </span>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-danger">Limpar Todos</button>
-                            <button type="button" class="btn btn-success">Finalizar Compra</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
 
         <!-- End of the provided header HTML -->
     </header>

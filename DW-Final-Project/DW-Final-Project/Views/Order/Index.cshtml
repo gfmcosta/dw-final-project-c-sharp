@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Person.name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    <a asp-controller="Order" asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                    <a asp-controller="Order" asp-action="Details" asp-route-id="@item.id">Details</a> |
+                    <a asp-controller="Order" asp-action="Delete" asp-route-id="@item.id">Delete</a>
             </td>
         </tr>
 }
