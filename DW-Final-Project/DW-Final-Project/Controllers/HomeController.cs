@@ -21,7 +21,7 @@ namespace DW_Final_Project.Controllers
 
 		public IActionResult Index()
 		{
-            return View("~/Views/App/Splash.cshtml");
+            return View("~/Views/App/perfil.cshtml");
         }
 
         public async Task<IActionResult> ProdutosAsync()

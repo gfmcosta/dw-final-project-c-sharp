@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "header.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="ProfilePage.css">
+</head>
+
+<style>
+    .center {
+        text-align: left;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .main{
+        left: 50%;
+        transform: translate(-50%);
+        position: relative;
+    }
+
+    input{
+        width: 100%;
+        max-height: 20px;
+    }
+
+    label{
+        margin: auto;
+    }
+
+</style>
+
+<body>
+    <div class="main" style="grid-column: 1; grid-row: 1; margin-top: 10%; display: inline-flex;">
+        <h1>Perfil</h1><br>
+        <img src="" alt="Profile Icon" class="rounded-circle img-fluid" style="width: 150px; height: 150px; cursor: pointer;">
+        <input type="file" accept="image/*" style="display: none;">
+    </div>
+
+    <div class="main" style="min-height: 100vh; margin-top: 2%; width: 60%; content-align: center; display: grid; justify-content: center; grid-template-columns: 0.25fr 0.25fr; grid-template-rows: repeat(6, 0.1fr);">
+        <div class="center">
+            <label for="name">Nome</label>
+            <input type="text" id="name" placeholder="Insira o seu nome">
+        </div>
+
+        <div class="center">
+            <label for="phoneNumber">Telemóvel</label>
+            <input type="text" id="phoneNumber" placeholder="Insira o seu telemóvel">
+        </div>
+
+        <div class="center">
+            <label for="address">Morada</label>
+            <input type="text" id="address" placeholder="Insira a sua morada">
+        </div>
+
+        <div class="center">
+            <label for="postalCode">Código Postal</label>
+            <input type="text" id="postalCode" placeholder="Insira o seu código postal">
+        </div>
+
+        <div style="justify-content: center;">
+            <label for="gender"></label>
+            <select id="gender" style="width: 75%; display: inline;">
+                <option value="" disabled hidden>Género</option>
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+            </select>
+        </div>
+
+        <div>
+            <button class="btn-secondary" style="float: left; margin-left: 13%;" >Cancelar</button>
+            <button class="btn-primary" style="float: right; margin-right: 13%;" >Alterar</button>
+            </div>
+     </div>
+
+    <script src="ProfilePage.js"></script>
+</body>
+</html>
