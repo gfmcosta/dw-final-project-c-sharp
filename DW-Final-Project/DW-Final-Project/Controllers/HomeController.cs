@@ -1,7 +1,9 @@
 ﻿using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
 
 namespace DW_Final_Project.Controllers
@@ -19,7 +21,7 @@ namespace DW_Final_Project.Controllers
 
 		public IActionResult Index()
 		{
-            return View("~/Views/App/admin.cshtml");
+            return View("~/Views/App/Splash.cshtml");
         }
 
         public async Task<IActionResult> ProdutosAsync()
@@ -39,12 +41,17 @@ namespace DW_Final_Project.Controllers
 
 
         [HttpPost]
-        public IActionResult AddCart(int size, string totalPrice, [Bind("id,productFK,quantity,priceAux,imagePath")] OrderItem item)
+        public async Task<IActionResult> AddCartAsync(string size, [Bind("id,productFK,quantity,priceAux,imagePath")] OrderItem item, string submitAction)
         {
-            var tamanho = size;
-            var preco = totalPrice;
-            //ACABAR
-            return View("~/Views/App/sobre.cshtml");
+            string serializedList = HttpContext.Session.GetString("shoppingCart");
+            List<OrderItem> lista = JsonConvert.DeserializeObject<List<OrderItem>>(serializedList);
+            lista.Add(item);
+            if (submitAction == "Adicionar"){
+                string listaJson = JsonConvert.SerializeObject(lista);
+                HttpContext.Session.SetString("shoppingCart", listaJson);
+
+            }
+            return View();
         }
 
         public IActionResult Sobre()
