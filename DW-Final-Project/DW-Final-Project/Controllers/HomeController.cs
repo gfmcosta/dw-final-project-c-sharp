@@ -60,7 +60,7 @@ namespace DW_Final_Project.Controllers
 
         public IActionResult Login()
         {
-            return View("~/Views/App/login.cshtml");
+            return View("~/Areas/Identity/Pages/Account/Login.cshtml");
         }
 
         public IActionResult Registar()

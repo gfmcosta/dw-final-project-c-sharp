@@ -17,9 +17,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 
 namespace DW_Final_Project.Areas.Identity.Pages.Account
 {
@@ -119,6 +121,11 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (Input.Email.Contains("@admin.ipt.pt"))
+            {
+                ModelState.AddModelError("", "O email não pode conter o domínio admin.ipt.pt");
+
+            }
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
