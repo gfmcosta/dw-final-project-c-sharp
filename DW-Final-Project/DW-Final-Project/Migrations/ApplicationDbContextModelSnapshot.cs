@@ -34,7 +34,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasIndex("productListid");
 
-                    b.ToTable("CategoryProduct");
+                    b.ToTable("CategoryProduct", (string)null);
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Category", b =>
@@ -52,7 +52,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
 
                     b.HasData(
                         new
@@ -118,7 +118,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasIndex("personFK");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.OrderItem", b =>
@@ -151,7 +151,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasIndex("productFK");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Person", b =>
@@ -195,7 +195,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Person");
+                    b.ToTable("Person", (string)null);
                 });
 
             modelBuilder.Entity("DW_Final_Project.Models.Product", b =>
@@ -230,7 +230,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasIndex("seasonFK");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
 
                     b.HasData(
                         new
@@ -339,7 +339,7 @@ namespace DW_Final_Project.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Product_Season");
+                    b.ToTable("Product_Season", (string)null);
 
                     b.HasData(
                         new

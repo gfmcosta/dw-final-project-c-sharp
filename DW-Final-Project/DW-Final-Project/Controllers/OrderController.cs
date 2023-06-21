@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using DW_Final_Project.Migrations;
+using System.Globalization;
 
 namespace DW_Final_Project.Controllers
 {
@@ -108,11 +109,26 @@ namespace DW_Final_Project.Controllers
             existingOrder.IVA = order.IVA;
             existingOrder.personFK = order.personFK;
             // atribuir os dados do PrecoCompraAux ao PrecoCompra
-            if (!string.IsNullOrEmpty(order.priceAux)) {
+            /*if (!string.IsNullOrEmpty(order.priceAux)) {
             
                 existingOrder.price =
                    Convert.ToDecimal(order.priceAux
                                             .Replace('.', ','));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+            }*/
+            if (!string.IsNullOrEmpty(order.priceAux))
+            {
+                if (decimal.TryParse(order.priceAux, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal price))
+                {
+                    existingOrder.price = price;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "O preço do produto é inválido.");
+                }
             }
             else
             {

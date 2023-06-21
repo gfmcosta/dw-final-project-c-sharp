@@ -63,11 +63,26 @@ namespace DW_Final_Project.Controllers
         {
 
             // atribuir os dados do PrecoCompraAux ao PrecoCompra
-            if (!string.IsNullOrEmpty(product.priceAux))
+            /*if (!string.IsNullOrEmpty(product.priceAux))
             {
                 product.price =
                    Convert.ToDecimal(product.priceAux
                                             .Replace('.', ','));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+            }*/
+            if (!string.IsNullOrEmpty(product.priceAux))
+            {
+                if (decimal.TryParse(product.priceAux, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal price))
+                {
+                    product.price = price;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "O preço do produto é inválido.");
+                }
             }
             else
             {
@@ -143,11 +158,26 @@ namespace DW_Final_Project.Controllers
             existingProduct.description = product.description;
             existingProduct.quantity = product.quantity;
             // atribuir os dados do PrecoCompraAux ao PrecoCompra
-            if (!string.IsNullOrEmpty(product.priceAux))
+            /*if (!string.IsNullOrEmpty(product.priceAux))
             {
                 existingProduct.price =
                    Convert.ToDecimal(product.priceAux
                                             .Replace('.', ','));
+            }
+            else
+            {
+                ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+            }*/
+            if (!string.IsNullOrEmpty(product.priceAux))
+            {
+                if (decimal.TryParse(product.priceAux, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal price))
+                {
+                    existingProduct.price = price;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "O preço do produto é inválido.");
+                }
             }
             else
             {
