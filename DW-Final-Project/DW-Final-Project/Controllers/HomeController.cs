@@ -49,7 +49,6 @@ namespace DW_Final_Project.Controllers
             if (submitAction == "Adicionar"){
                 string listaJson = JsonConvert.SerializeObject(lista);
                 HttpContext.Session.SetString("shoppingCart", listaJson);
-
             }
             return View();
         }
