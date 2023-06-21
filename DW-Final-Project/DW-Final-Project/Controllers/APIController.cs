@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
 using System;
+using System.Globalization;
 using System.Net.WebSockets;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
@@ -323,9 +324,21 @@ namespace DW_Final_Project.Controllers
         {
             try
             {
-                product.price =
-                   Convert.ToDecimal(product.priceAux
-                                            .Replace('.', ','));
+                if (!string.IsNullOrEmpty(product.priceAux))
+                {
+                    if (decimal.TryParse(product.priceAux, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal price))
+                    {
+                        product.price = price;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "O preço do produto é inválido.");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Deve escolher o preço do produto, por favor.");
+                }
                 if (product.imagePath.StartsWith("data:image/"))
                 {
                     int startIndex = product.imagePath.IndexOf("/") + 1; // Encontra a posição do primeiro caractere após "/"
