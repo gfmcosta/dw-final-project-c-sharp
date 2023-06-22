@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -66,20 +68,6 @@
         margin-top: 0% !important;
     }
 
-    .cartPopup {
-        display: none;
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%);
-        width: 500px;
-        height: 400px;
-        background-color: #fefefefe;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        z-index: 9999;
-    }
-
     #cartCheckbox:checked ~ .cartPopup {
         display: block;
     }
@@ -114,6 +102,10 @@
                     </li>
 
                     <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Carrinho">Carrinho</a>
+                    </li>
+
+                    <li class="nav-item">
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <a asp-area="Identity" asp-page="/Account/Login">Iniciar Sessão</a>
@@ -127,11 +119,8 @@
                 </div>
             </div>
         </nav>
-        
-        <input type="checkbox" id="cartCheckbox" >
-        <label for="cartCheckbox" >Ver Carrinho</label>
 
-        <div class="cartPopup">
+@*        <div class="cartPopup">
             <div id="cartModal">
                 <div>
                     <div>
@@ -150,6 +139,14 @@
                                     <span style="display: inline-block; width: 80px;">Preço</span>
                                 </p>
                             </strong>
+                            @if(carrinho != null){@foreach (var item in carrinho){
+                            <p>
+                                <span style="display: inline-block; width: 60px; margin-left: 10%;">Nº</span>
+                                <span style="display: inline-block; width: 100px;"></span>
+                                <span style="display: inline-block; width: 80px;">@item.size</span>
+                                <span style="display: inline-block; width: 100px;">@item.quantity</span>
+                                <span style="display: inline-block; width: 80px;">@item.totalPrice</span>
+                            </p>}}
                         </div>
                         <div>
                             <span style="margin-right: auto; font-weight: bold; font-size: 20px;">Preço Total: </span>
@@ -161,7 +158,7 @@
                 </div>
             </div>
 
-        </div>
+        </div>*@
 
         <!-- End of the provided header HTML -->
     </header>

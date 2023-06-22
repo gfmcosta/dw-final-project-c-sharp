@@ -1,5 +1,6 @@
 using DW_Final_Project.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,6 @@ builder.Services.AddCors(options => {
 		.AllowAnyOrigin();
 	});
 });
-
 
 var app = builder.Build();
 

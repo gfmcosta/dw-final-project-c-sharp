@@ -1,0 +1,59 @@
+﻿@{
+    List<OrderItem> carrinho = ViewBag.carrinho as List<OrderItem>;
+    var produtos = ViewBag.produto as List<Product>;
+    var persona = ViewBag.pessoa as Person;
+}
+
+@{
+    var imagepath = "";
+}
+
+@{
+    var carrinhoJson = Newtonsoft.Json.JsonConvert.SerializeObject(carrinho);
+}
+
+@{
+    Layout = "~/Views/App/header.cshtml";
+}
+<form enctype="multipart/form-data" asp-controller="Home" asp-action="Pedidos">
+        <div>
+            <div>
+                <div>
+                    <h5 class="modal-title">Carrinho de Compras</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div>
+                    <h4>Lista de produtos</h4>
+                    <strong>
+                        <p>
+                            <span style="display: inline-block; width: 100px; margin-left: 5%">Nome</span>
+                            <span style="display: inline-block; width: 80px;">Tamanho</span>
+                            <span style="display: inline-block; width: 100px;">Quantidade</span>
+                            <span style="display: inline-block; width: 80px;">Preço</span>
+                        </p>
+                    </strong>
+                    @if (carrinho != null)
+                    {@foreach (var item in carrinho)
+                        {
+                    @foreach (var produto in produtos) { if (item.productFK == produto.id) { imagepath = produto.imagePath; } }
+
+                            <p>
+                                <img src="http://localhost:5072/images/@imagepath" style="width: 4%;"></img>
+                                <span style="display: inline-block; width: 100px;">@foreach(var produto in produtos){if(item.productFK==produto.id)@produto.name}</span>
+                                <span style="display: inline-block; width: 80px;">@item.size</span>
+                                <span style="display: inline-block; width: 100px;">@item.quantity</span>
+                                <span style="display: inline-block; width: 80px;">@item.totalPrice</span>
+                            </p>
+                        }}
+                </div>
+                <input hidden name="id" value="@persona.id" />
+            <input hidden name="orderItemList" value="@carrinhoJson" />
+                <div>
+                    <span style="margin-right: auto; font-weight: bold; font-size: 20px;">Preço Total: </span>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger">Limpar Todos</button>
+                    <button type="submit" class="btn btn-success">Finalizar Compra</button>
+                </div>
+            </div>
+        </div>
+</form>

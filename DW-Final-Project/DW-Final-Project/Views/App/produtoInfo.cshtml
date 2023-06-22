@@ -19,7 +19,10 @@
 <body>
     <div class="container" style="margin-top: 3%; left: 5%; position: relative;">
         <div class="row" style="min-width: 1200px;">
-            <form asp-controller="Home" asp-action="AddCart" method="post">
+            <form enctype="multipart/form-data" asp-controller="Home" asp-action="AddCart">
+            <input hidden name="productFK" value="@product.id"/>
+            <input hidden name="productPrice" value="@product.price"/>
+                <input hidden name="name" value="@product.name" />
             <div class="col-md-6" style="float: left; max-width: 40%; margin-left: 10%;">
                     <img src="http://localhost:5072/images/@product.imagePath"
                      alt="Product" class="img-fluid" style="width: 100%;">
@@ -33,17 +36,22 @@
                          alt="Product" class="img-fluid" style="width: 40%; cursor: pointer; border: 2px solid black;">
                 </div><br>
                 <div class="input-group my-4">
-                    <input type="number" min="1" max="10" value="" class="form-control">
+                    <input type="number" min="1" max="10" name="quantity" value="" class="form-control">
                     <div class="input-group-append">
                         <span class="input-group-text">Quantidade</span>
                     </div>
                 </div>
                 <p>Tamanhos</p>
-                <div style="display: grid; justify-content: center; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 2fr; gap: 20px 20px;">
-                        <button type="submit" name="size" class="button-size">S</button>
-                        <button type="submit" name="size" class="button-size">M</button>
-                        <button type="submit" name="size" class="button-size">L</button>
-                </div>
+                    <div style="display: grid; justify-content: center; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 2fr; gap: 20px 20px;">
+                        <input type="radio" name="size" value="S" id="sizeS">
+                        <label for="sizeS">S</label>
+
+                        <input type="radio" name="size" value="M" id="sizeM">
+                        <label for="sizeM">M</label>
+
+                        <input type="radio" name="size" value="L" id="sizeL">
+                        <label for="sizeL">L</label>
+                    </div>
                 <br><br>
                     <button type="submit" class="add-button" style="width: 100%;" name="submitAction" value="Adicionar">
                     <i class="mr-2"></i>Adicionar
