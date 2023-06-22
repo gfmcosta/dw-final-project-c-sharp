@@ -38,7 +38,7 @@
                     @foreach (var produto in produtos) { if (item.productFK == produto.id) { imagepath = produto.imagePath; } }
 
                             <p>
-                                <img src="http://localhost:5072/images/@imagepath" style="width: 4%;"></img>
+                            <img src="http://dw-final-project.azurewebsites.net/images/@imagepath" style="width: 4%;"></img>
                                 <span style="display: inline-block; width: 100px;">@foreach(var produto in produtos){if(item.productFK==produto.id)@produto.name}</span>
                                 <span style="display: inline-block; width: 80px;">@item.size</span>
                                 <span style="display: inline-block; width: 100px;">@item.quantity</span>

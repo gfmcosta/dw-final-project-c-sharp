@@ -121,11 +121,7 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (Input.Email.Contains("@admin.ipt.pt") && !User.Identity.Name.Contains("@admin.ipt.pt"))
-            {
-                ModelState.AddModelError("", "O email não pode conter o domínio admin.ipt.pt");
-
-            }
+            
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
