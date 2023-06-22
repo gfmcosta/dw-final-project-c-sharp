@@ -47,7 +47,17 @@ namespace DW_Final_Project.Controllers
             ViewBag.Products = products;
             return View("~/Views/App/produtos.cshtml");
         }
-
+        public async Task<IActionResult> limparCarrinhoAsync()
+        {
+            carrinho = new List<OrderItem>();
+            TempData["shoppingCart"] = null;
+            var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+            var pid = await _context.Person.Where(p => p.userId == user.Id).FirstOrDefaultAsync();
+            ViewBag.pessoa = pid;
+            ViewBag.carrinho = carrinho;
+            ViewBag.Produto = null;
+            return View("~/Views/App/carrinho.cshtml");
+        }
         public async Task<IActionResult> ProdutoInfoAsync(int id)
         {
             var id_produto = id;
@@ -60,6 +70,8 @@ namespace DW_Final_Project.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCartAsync(string size, int quantity,decimal productPrice, int productFK, string submitAction)
         {
+            if (User.Identity.IsAuthenticated)
+            {
             string teste = "[]" ;
             if (TempData["shoppingCart"] != null)
             {
@@ -83,6 +95,11 @@ namespace DW_Final_Project.Controllers
             var products = await _context.Product.ToListAsync();
             ViewBag.Products = products;
             return View("~/Views/App/produtos.cshtml");
+            }
+            else
+            {
+                return View("~/Views/App/Splash.cshtml");
+            }
         }
 
         public IActionResult Sobre()
@@ -145,12 +162,16 @@ namespace DW_Final_Project.Controllers
 
         public async Task<IActionResult> CarrinhoAsync()
         {
+            if (User.Identity.IsAuthenticated)
+            {
             var user = await _userManager.FindByEmailAsync(User.Identity.Name);
             var pid = await _context.Person.Where(p => p.userId == user.Id).FirstOrDefaultAsync();
             ViewBag.pessoa = pid;
             ViewBag.carrinho = carrinho;
             ViewBag.Produto = produto;
             return View("~/Views/App/carrinho.cshtml");
+            }
+            return View("~/Views/App/Splash.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
