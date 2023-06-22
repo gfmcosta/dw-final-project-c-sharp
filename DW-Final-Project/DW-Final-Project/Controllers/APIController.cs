@@ -111,15 +111,27 @@ namespace DW_Final_Project.Controllers
         [HttpGet("/API/orderItems/{id}")]
         public async Task<IActionResult> OrderItemsByOrderId(int id)
         {
-            var orderItems = await _context.OrderItem.Where(o => o.orderFK== id).ToListAsync();
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve, // Preserve object references
+                MaxDepth = 32 // Set the maximum depth
+            };
+
+            var orderItems = await _context.OrderItem
+                .Where(o => o.orderFK == id)
+                .Include(o => o.product)
+                .ToListAsync();
 
             if (orderItems == null)
             {
                 return NotFound();
             }
 
-            return Ok(orderItems);
+            var json = JsonSerializer.Serialize(orderItems, options);
+
+            return Ok(json);
         }
+
 
         //GET: Get All Categories
         [HttpGet("/API/Category")]

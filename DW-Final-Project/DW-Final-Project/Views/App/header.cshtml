@@ -29,10 +29,10 @@
         }
 
     .container {
-        display: flex;
+        display:grid;
         justify-content: center;
-        width: 29% !important;
         flex-wrap: wrap;
+        height: auto;
     }
 
     .collapse-navbar-collapse {
@@ -68,7 +68,7 @@
 
     .cartPopup {
         display: none;
-        position: fixed;
+        position: absolute;
         left: 50%;
         transform: translate(-50%);
         width: 500px;
@@ -77,6 +77,7 @@
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        z-index: 9999;
     }
 
     #cartCheckbox:checked ~ .cartPopup {
