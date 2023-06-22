@@ -9,9 +9,11 @@ using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DW_Final_Project.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,6 +26,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             var applicationDbContext = _context.Product.Include(p => p.Season);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -31,6 +37,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Product == null)
             {
                 return NotFound();
@@ -50,6 +60,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             ViewData["seasonFK"] = new SelectList(_context.Product_Season, "id", "description");
             return View();
         }
@@ -61,6 +75,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,name,description,quantity,priceAux,imagePath,seasonFK")] Product product, IFormFile imageFile)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
 
             // atribuir os dados do PrecoCompraAux ao PrecoCompra
             /*if (!string.IsNullOrEmpty(product.priceAux))
@@ -124,6 +142,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Product == null)
             {
                 return NotFound();
@@ -146,6 +168,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,name,description,quantity,priceAux,imagePath,seasonFK")] Product product, IFormFile imageFile)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id != product.id)
             {
                 return NotFound();
@@ -230,6 +256,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Product == null)
             {
                 return NotFound();
@@ -251,6 +281,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (_context.Product == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Product'  is null.");

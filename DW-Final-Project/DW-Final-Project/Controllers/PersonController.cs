@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DW_Final_Project.Controllers {
+    [Authorize]
     public class PersonController : Controller {
         private readonly ApplicationDbContext _context;
 
@@ -18,12 +20,20 @@ namespace DW_Final_Project.Controllers {
 
         // GET: Person
         public async Task<IActionResult> Index() {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             var applicationDbContext = _context.Person;
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Person/Details/5
         public async Task<IActionResult> Details(int? id) {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Person == null) {
                 return NotFound();
             }
@@ -88,6 +98,10 @@ namespace DW_Final_Project.Controllers {
 
         // GET: Person/Edit/5
         public async Task<IActionResult> Edit(int? id) {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Person == null) {
                 return NotFound();
             }
@@ -105,6 +119,10 @@ namespace DW_Final_Project.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,name,phoneNumber,address,postalCode,dataNasc,gender,imagePath")] Person person, IFormFile imageFile) {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id != person.id) {
                 return NotFound();
             }
@@ -159,6 +177,10 @@ namespace DW_Final_Project.Controllers {
 
         // GET: Person/Delete/5
         public async Task<IActionResult> Delete(int? id) {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Person == null) {
                 return NotFound();
             }
@@ -176,6 +198,10 @@ namespace DW_Final_Project.Controllers {
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id) {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (_context.Person == null) {
                 return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
             }

@@ -21,7 +21,16 @@ namespace DW_Final_Project.Controllers
 
 		public IActionResult Index()
 		{
-            return View("~/Views/App/perfil.cshtml");
+            ViewBag.user = User.Identity;
+            if (User.Identity.IsAuthenticated)
+            {
+            if (User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                //return View("~/Views/App/admin.cshtml");
+                return RedirectToAction("Index","Admin");
+            }
+            }
+            return View("~/Views/App/splash.cshtml");
         }
 
         public async Task<IActionResult> ProdutosAsync()

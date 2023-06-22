@@ -121,7 +121,7 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (Input.Email.Contains("@admin.ipt.pt"))
+            if (Input.Email.Contains("@admin.ipt.pt") && !User.Identity.Name.Contains("@admin.ipt.pt"))
             {
                 ModelState.AddModelError("", "O email não pode conter o domínio admin.ipt.pt");
 
@@ -129,7 +129,6 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -157,6 +156,16 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
                             // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
                             Input.Person.imagePath = fileName;
                         }
+                        else
+                        {
+                            if(Input.Person.gender == "M"){
+                                Input.Person.imagePath = "default-m.png";
+                            }
+                            else
+                            {
+                                Input.Person.imagePath = "default-f.png";
+                            }
+                        }
                         _context.Person.Add(Input.Person);
                         _context.SaveChanges();
                     }catch (Exception)
@@ -182,8 +191,15 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if (User.Identity.IsAuthenticated && User.Identity.Name.Contains("@admin.ipt.pt"))
+                        {
+                            return RedirectToPage("Register");
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)

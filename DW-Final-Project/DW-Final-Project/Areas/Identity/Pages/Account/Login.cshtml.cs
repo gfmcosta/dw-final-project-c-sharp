@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DW_Final_Project.Areas.Identity.Pages.Account
 {
@@ -115,7 +116,14 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    if (Input.Email.Contains("@admin.ipt.pt"))
+                    {
+                        return RedirectToAction("Index","Admin");
+                    }
+                    else
+                    {
                     return LocalRedirect(returnUrl);
+                    }
                 }
                 if (result.RequiresTwoFactor)
                 {

@@ -6,9 +6,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using DW_Final_Project.Data;
+using DW_Final_Project.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace DW_Final_Project.Areas.Identity.Pages.Account.Manage
 {
@@ -16,13 +19,16 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -55,21 +61,20 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            public Person Person { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
+            var userId = await _userManager.GetUserIdAsync(user);
+            var p = await _context.Person.Where(p => p.userId == userId).FirstOrDefaultAsync();
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                Person = p
             };
         }
 
@@ -85,7 +90,7 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(IFormFile imageFile)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -99,15 +104,42 @@ namespace DW_Final_Project.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var userId = await _userManager.GetUserIdAsync(user);
+            var p = await _context.Person.Where(p => p.userId == userId).FirstOrDefaultAsync();
+            Input.Person.userId = userId;
+            Input.Person.id = p.id;
+            if (Input.Person != p)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                try
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    if (imageFile != null && imageFile.Length > 0)
+                    {
+                        // Gerar um nome único para o arquivo
+                        string fileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+
+                        // Caminho completo para salvar a imagem (pode ser um caminho personalizado)
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+
+                        // Salvar o arquivo no servidor
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        // Atualizar a propriedade imagePath do objeto person com o nome do arquivo
+                        Input.Person.imagePath = fileName;
+                    }
+                    else
+                    {
+                        Input.Person.imagePath = p.imagePath;
+                    }
+                    _context.Entry(p).State = EntityState.Detached;
+                    _context.Person.Update(Input.Person);
+                await _context.SaveChangesAsync();
+                }catch (Exception) {
+                    throw;
                 }
+                
             }
 
             await _signInManager.RefreshSignInAsync(user);

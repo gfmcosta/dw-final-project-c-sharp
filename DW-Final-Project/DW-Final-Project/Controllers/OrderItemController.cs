@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DW_Final_Project.Controllers
 {
+    [Authorize]
     public class OrderItemController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -23,6 +25,10 @@ namespace DW_Final_Project.Controllers
         // GET: OrderItem
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             var applicationDbContext = _context.OrderItem.Include(o => o.order).Include(o => o.product);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -30,6 +36,10 @@ namespace DW_Final_Project.Controllers
         // GET: OrderItem/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.OrderItem == null)
             {
                 return NotFound();
@@ -50,6 +60,10 @@ namespace DW_Final_Project.Controllers
         // GET: OrderItem/Create
         public IActionResult Create()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             ViewData["orderFK"] = new SelectList(_context.Order, "id", "id");
             ViewData["productFK"] = new SelectList(_context.Product, "id", "name");
             return View();
@@ -62,6 +76,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("size,quantity,orderFK,productFK")] OrderItem orderItem)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             ModelState.Remove("order");
             ModelState.Remove("product");
             ModelState.Remove("totalPriceAux");
@@ -85,6 +103,10 @@ namespace DW_Final_Project.Controllers
         // GET: OrderItem/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.OrderItem == null)
             {
                 return NotFound();
@@ -107,6 +129,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,size,quantity,productFK")] OrderItem orderItem)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id != orderItem.id)
             {
                 return NotFound();
@@ -159,6 +185,10 @@ namespace DW_Final_Project.Controllers
         // GET: OrderItem/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.OrderItem == null)
             {
                 return NotFound();
@@ -181,6 +211,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (_context.OrderItem == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.OrderItem'  is null.");

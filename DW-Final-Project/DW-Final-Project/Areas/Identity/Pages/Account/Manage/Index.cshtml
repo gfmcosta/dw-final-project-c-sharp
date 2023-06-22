@@ -9,16 +9,56 @@
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
-        <form id="profile-form" method="post">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Input.Person.name" class="control-label"></label>
+                    <input asp-for="Input.Person.name" class="form-control" />
+                    <span asp-validation-for="Input.Person.name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Person.phoneNumber" class="control-label"></label>
+                    <input asp-for="Input.Person.phoneNumber" class="form-control" />
+                    <span asp-validation-for="Input.Person.phoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Person.address" class="control-label"></label>
+                    <input asp-for="Input.Person.address" class="form-control" />
+                    <span asp-validation-for="Input.Person.address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Person.postalCode" class="control-label"></label>
+                    <input asp-for="Input.Person.postalCode" class="form-control" />
+                    <span asp-validation-for="Input.Person.postalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Person.dataNasc" class="control-label"></label>
+                    <input asp-for="Input.Person.dataNasc" class="form-control" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="Input.Person.dataNasc" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Person.gender" class="control-label"></label>
+                    <div>
+                        <label>
+                            <input asp-for="Input.Person.gender" type="radio" value="M" /> Masculino
+                        </label>
+                        <label>
+                            <input asp-for="Input.Person.gender" type="radio" value="F" /> Feminino
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.Person.gender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Person.imagePath" class="control-label"></label>
+                    <input name="imageFile" class="form-control" type="file" accept="image/*" />
+                    <span asp-validation-for="Input.Person.imagePath" class="text-danger"></span>
+                </div>
+
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>

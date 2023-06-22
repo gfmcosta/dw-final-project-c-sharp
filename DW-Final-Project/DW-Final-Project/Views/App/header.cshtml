@@ -113,7 +113,14 @@
                     </li>
 
                     <li class="nav-item">
-                        <a asp-area="Identity" asp-page="/Account/Login">Iniciar Sessão</a>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <a asp-area="Identity" asp-page="/Account/Login">Iniciar Sessão</a>
+                        }
+                        else
+                        {
+                            <a asp-area="Identity" asp-page="/Account/Manage/Index">Perfil</a>
+                        }
                     </li>
 
                 </div>

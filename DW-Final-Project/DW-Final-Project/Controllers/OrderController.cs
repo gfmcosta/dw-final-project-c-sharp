@@ -9,9 +9,11 @@ using DW_Final_Project.Data;
 using DW_Final_Project.Models;
 using DW_Final_Project.Migrations;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DW_Final_Project.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,6 +26,10 @@ namespace DW_Final_Project.Controllers
         // GET: Order
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             var applicationDbContext = _context.Order.Include(o => o.Person);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -31,6 +37,10 @@ namespace DW_Final_Project.Controllers
         // GET: Order/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Order == null)
             {
                 return NotFound();
@@ -50,6 +60,10 @@ namespace DW_Final_Project.Controllers
         // GET: Order/Create
         public IActionResult Create()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             ViewData["personFK"] = new SelectList(_context.Person, "id", "name");
             return View();
         }
@@ -61,6 +75,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,personFK")] Order order)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             order.IVA = 23;
             order.price = 0;
             ModelState.Remove("priceAux");
@@ -78,6 +96,10 @@ namespace DW_Final_Project.Controllers
         // GET: Order/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Order == null)
             {
                 return NotFound();
@@ -100,7 +122,11 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,priceAux,IVA,personFK")] Order order)
         {
-                if (id != order.id)
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
+            if (id != order.id)
             {
                 return NotFound();
             }
@@ -162,6 +188,10 @@ namespace DW_Final_Project.Controllers
         // GET: Order/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Order == null)
             {
                 return NotFound();
@@ -183,6 +213,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (_context.Order == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Order'  is null.");

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DW_Final_Project.Data;
 using DW_Final_Project.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DW_Final_Project.Controllers
 {
+    [Authorize]
     public class Product_SeasonController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,7 +24,11 @@ namespace DW_Final_Project.Controllers
         // GET: Product_Season
         public async Task<IActionResult> Index()
         {
-              return _context.Product_Season != null ? 
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
+            return _context.Product_Season != null ? 
                           View(await _context.Product_Season.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Product_Season'  is null.");
         }
@@ -30,6 +36,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product_Season/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Product_Season == null)
             {
                 return NotFound();
@@ -48,6 +58,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product_Season/Create
         public IActionResult Create()
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             return View();
         }
 
@@ -58,6 +72,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,description")] Product_Season product_Season)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(product_Season);
@@ -70,6 +88,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product_Season/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Product_Season == null)
             {
                 return NotFound();
@@ -90,6 +112,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,description")] Product_Season product_Season)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id != product_Season.id)
             {
                 return NotFound();
@@ -121,6 +147,10 @@ namespace DW_Final_Project.Controllers
         // GET: Product_Season/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (id == null || _context.Product_Season == null)
             {
                 return NotFound();
@@ -141,6 +171,10 @@ namespace DW_Final_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            if (!User.Identity.Name.Contains("@admin.ipt.pt"))
+            {
+                return NotFound();
+            }
             if (_context.Product_Season == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Product_Season'  is null.");
