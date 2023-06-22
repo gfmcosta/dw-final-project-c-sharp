@@ -43,6 +43,12 @@ namespace DW_Final_Project.Models
 		public int IVA { get; set; } = 23;
 
 		/// <summary>
+		/// Data da Order
+		/// </summary>
+		[Display(Name ="Data")]
+		public DateTime date { get; set; } = DateTime.Now;
+
+		/// <summary>
 		/// FK person
 		/// </summary>
 		[ForeignKey(nameof(Person))]

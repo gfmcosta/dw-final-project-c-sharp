@@ -22,6 +22,9 @@
                 @Html.DisplayNameFor(model => model.IVA)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.date)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Person)
             </th>
             <th></th>
@@ -39,6 +42,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IVA)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.date)
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Person.name)
             </td>

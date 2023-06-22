@@ -79,7 +79,7 @@ namespace DW_Final_Project.Controllers
             return BadRequest();
         }
 
-        //GET: Get All Products
+        //GET: Get All Products 
         [HttpGet("/API/Products")]
         public async Task<IActionResult> Products()
         {
@@ -91,6 +91,34 @@ namespace DW_Final_Project.Controllers
             }
 
             return Ok(products);
+        }
+
+        //GET: Get All Products
+        [HttpGet("/API/OrderHistory/{id}")]
+        public async Task<IActionResult> OrderHistory(int id)
+        {
+            var orderHistory = await _context.Order.Where(o=> o.personFK ==id).ToListAsync();
+
+            if (orderHistory == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orderHistory);
+        }
+
+        //GET: Get All Products
+        [HttpGet("/API/orderItems/{id}")]
+        public async Task<IActionResult> OrderItemsByOrderId(int id)
+        {
+            var orderItems = await _context.OrderItem.Where(o => o.orderFK== id).ToListAsync();
+
+            if (orderItems == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orderItems);
         }
 
         //GET: Get All Categories
